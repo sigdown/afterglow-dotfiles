@@ -52,6 +52,11 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar")
     hl.exec_cmd("mako")
+
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+
+    hl.exec_cmd("hypridle")
 end)
 
 -------------------------------
@@ -262,7 +267,11 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(
+    mainMod .. " + M",
+    hl.dsp.exec_cmd("$HOME/.local/bin/afterglow-session")
+)
+
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
@@ -278,6 +287,11 @@ hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 hl.bind(
     "Print",
     hl.dsp.exec_cmd("$HOME/.local/bin/afterglow-shot")
+)
+
+hl.bind(
+    mainMod .. " + L",
+    hl.dsp.exec_cmd("pidof hyprlock >/dev/null || hyprlock")
 )
 
 -- Switch workspaces with mainMod + [0-9]
