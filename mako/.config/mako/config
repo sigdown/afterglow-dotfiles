@@ -1,0 +1,39 @@
+# Afterglow notification theme
+
+font=JetBrainsMono Nerd Font 11
+
+background-color=#031432F2
+text-color=#E7C498FF
+progress-color=over #B3571FFF
+
+width=360
+height=130
+
+outer-margin=12
+margin=6
+padding=14
+
+border-size=0
+border-radius=0
+
+anchor=top-right
+layer=overlay
+
+icons=0
+markup=1
+
+max-visible=4
+max-history=10
+
+default-timeout=5000
+ignore-timeout=1
+
+format=<b>%s</b>\n%b
+
+[urgency=low]
+default-timeout=3000
+
+[urgency=critical]
+background-color=#571B0EF2
+text-color=#E7C498FF
+default-timeout=0
