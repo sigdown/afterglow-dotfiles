@@ -1,24 +1,45 @@
+@define-color bg          #031432;
+@define-color bg-alt      #04172d;
+@define-color surface     #170e14;
+@define-color foreground  #e7c498;
+@define-color muted       #a79682;
+@define-color teal        #268272;
+@define-color orange      #b3571f;
+@define-color orange-dark #92401a;
+@define-color danger      #571b0e;
+
 * {
-    border: none;
-    min-height: 0;
-    font-family: sans-serif;
+    font-family: "JetBrainsMono Nerd Font";
     font-size: 13px;
 }
 
 window#waybar {
-    background: rgba(20, 20, 28, 0.92);
-    color: #eeeeee;
+    background: rgba(3, 20, 50, 0.88);
+    color: @foreground;
+    border-bottom: 1px solid rgba(179, 87, 31, 0.45);
 }
 
 #workspaces button {
-    padding: 0 10px;
-    color: #999999;
+    color: @muted;
     background: transparent;
+    border-radius: 8px;
+    padding: 0 8px;
+    margin: 4px 2px;
+}
+
+#workspaces button:hover {
+    color: @foreground;
+    background: rgba(179, 87, 31, 0.35);
 }
 
 #workspaces button.active {
-    color: #ffffff;
-    background: rgba(100, 140, 220, 0.45);
+    color: @bg;
+    background: @teal;
+}
+
+#workspaces button.urgent {
+    color: @foreground;
+    background: @danger;
 }
 
 #clock,
@@ -27,8 +48,17 @@ window#waybar {
 #pulseaudio,
 #network,
 #tray {
-    margin: 4px 3px;
+    color: @foreground;
     padding: 0 10px;
+    margin: 4px 2px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(23, 14, 20, 0.55);
+}
+
+#pulseaudio.muted {
+    color: @orange;
+}
+
+#network.disconnected {
+    color: @danger;
 }

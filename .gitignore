@@ -8,3 +8,6 @@ secrets/
 *.log
 *.tmp
 *.bak
+
+# Images
+hypr/.config/hypr/wallpapers/*
