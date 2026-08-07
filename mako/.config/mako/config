@@ -2,9 +2,9 @@
 
 font=JetBrainsMono Nerd Font 11
 
-background-color=#031432F2
-text-color=#E7C498FF
-progress-color=over #B3571FFF
+background-color=#101A28F2
+text-color=#EBC99AFF
+progress-color=over #C5662AFF
 
 width=360
 height=130
@@ -13,8 +13,9 @@ outer-margin=12
 margin=6
 padding=14
 
-border-size=0
-border-radius=0
+border-size=1
+border-color=#2B3441FF
+border-radius=4
 
 anchor=top-right
 layer=overlay
@@ -28,12 +29,14 @@ max-history=10
 default-timeout=5000
 ignore-timeout=1
 
-format=<b>%s</b>\n%b
+format=%s\n%b
 
 [urgency=low]
+text-color=#C8A982FF
 default-timeout=3000
 
 [urgency=critical]
-background-color=#571B0EF2
-text-color=#E7C498FF
+background-color=#31262EF2
+text-color=#EBC99AFF
+border-color=#C65E49FF
 default-timeout=0
