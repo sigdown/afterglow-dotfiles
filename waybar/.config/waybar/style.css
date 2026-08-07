@@ -22,7 +22,7 @@
 }
 
 window#waybar {
-    background: alpha(@surface-base, 0.9);
+    background: alpha(@surface-base, 1.0);
     color: @text-secondary;
     border-bottom: 1px solid @border-subtle;
 }
