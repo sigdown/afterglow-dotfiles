@@ -11,3 +11,5 @@ secrets/
 
 # Images
 hypr/.config/hypr/wallpapers/*
+
+.local/

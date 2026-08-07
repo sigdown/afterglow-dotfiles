@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 mapfile -t packages < <(
-    grep -vE '^[[:space:]]*(#|$)' packages/system.txt
+    grep -vE '^[[:space:]]*(#|$)' packages/base.txt
 )
 
 sudo pacman -Syu --needed "${packages[@]}"

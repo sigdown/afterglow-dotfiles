@@ -1,8 +1,10 @@
 @define-color bg          #031432;
 @define-color bg-alt      #04172d;
 @define-color surface     #170e14;
+
 @define-color foreground  #e7c498;
 @define-color muted       #a79682;
+
 @define-color teal        #268272;
 @define-color orange      #b3571f;
 @define-color orange-dark #92401a;
@@ -14,27 +16,36 @@
 }
 
 window#waybar {
-    background: rgba(3, 20, 50, 0.88);
+    background: rgba(10, 12, 20, 0.96);
     color: @foreground;
-    border-bottom: 1px solid rgba(179, 87, 31, 0.45);
+}
+
+#workspaces {
+    margin-left: 8px;
 }
 
 #workspaces button {
     color: @muted;
     background: transparent;
-    border-radius: 8px;
-    padding: 0 8px;
-    margin: 4px 2px;
+
+    padding: 0 6px;
+    margin: 0;
+
+    border-radius: 0;
+
+    border-bottom: 2px solid transparent;
 }
 
 #workspaces button:hover {
     color: @foreground;
-    background: rgba(179, 87, 31, 0.35);
+    background: transparent;
 }
 
 #workspaces button.active {
-    color: @bg;
-    background: @teal;
+    color: @foreground;
+    background: transparent;
+
+    border-bottom-color: @orange;
 }
 
 #workspaces button.urgent {
@@ -49,10 +60,16 @@ window#waybar {
 #network,
 #tray {
     color: @foreground;
-    padding: 0 10px;
-    margin: 4px 2px;
-    border-radius: 8px;
-    background: rgba(23, 14, 20, 0.55);
+    background: transparent;
+
+    padding: 0 6px;
+    margin: 0;
+
+    border-radius: 0;
+}
+
+#tray {
+    margin-right: 16px;
 }
 
 #pulseaudio.muted {
