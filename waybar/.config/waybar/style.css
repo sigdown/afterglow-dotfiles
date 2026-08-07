@@ -1,81 +1,99 @@
-@define-color bg          #031432;
-@define-color bg-alt      #04172d;
-@define-color surface     #170e14;
+@define-color surface-base       #07111F;
+@define-color surface-raised     #101A28;
+@define-color surface-hover      #202C3A;
 
-@define-color foreground  #e7c498;
-@define-color muted       #a79682;
+@define-color text-primary       #EBC99A;
+@define-color text-secondary     #C8A982;
+@define-color text-muted         #8F9187;
 
-@define-color teal        #268272;
-@define-color orange      #b3571f;
-@define-color orange-dark #92401a;
-@define-color danger      #571b0e;
+@define-color border-subtle      #2B3441;
+
+@define-color accent-primary     #C5662A;
+@define-color accent-secondary   #2F8F80;
+
+@define-color critical           #C65E49;
 
 * {
     font-family: "JetBrainsMono Nerd Font";
     font-size: 13px;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
 }
 
 window#waybar {
-    background: rgba(10, 12, 20, 0.96);
-    color: @foreground;
+    background: alpha(@surface-base, 0.9);
+    color: @text-secondary;
+    border-bottom: 1px solid @border-subtle;
 }
 
 #workspaces {
-    margin-left: 8px;
+    margin-left: 10px;
 }
 
 #workspaces button {
-    color: @muted;
+    min-width: 24px;
+    padding: 0 5px;
+    margin: 0 1px;
+    color: @text-muted;
     background: transparent;
-
-    padding: 0 6px;
-    margin: 0;
-
-    border-radius: 0;
-
-    border-bottom: 2px solid transparent;
+    border-top: 2px solid transparent;
 }
 
 #workspaces button:hover {
-    color: @foreground;
+    color: @text-primary;
     background: transparent;
 }
 
 #workspaces button.active {
-    color: @foreground;
+    color: @text-primary;
     background: transparent;
-
-    border-bottom-color: @orange;
+    border-top: 2px solid @accent-primary;
 }
 
 #workspaces button.urgent {
-    color: @foreground;
-    background: @danger;
+    color: @critical;
+    background: transparent;
+    border-top: 2px solid @critical;
 }
 
-#clock,
+#clock {
+    color: @text-primary;
+    background: transparent;
+    padding: 0 12px;
+    margin: 0;
+}
+
 #language,
 #memory,
 #pulseaudio,
-#network,
-#tray {
-    color: @foreground;
+#network {
+    color: @text-secondary;
     background: transparent;
-
-    padding: 0 6px;
+    padding: 0 7px;
     margin: 0;
+}
 
-    border-radius: 0;
+#language {
+    color: @text-muted;
+}
+
+#network {
+    color: @accent-secondary;
 }
 
 #tray {
-    margin-right: 16px;
+    color: @text-secondary;
+    background: transparent;
+    padding-left: 9px;
+    padding-right: 4px;
+    margin-right: 10px;
 }
 
 #pulseaudio.muted {
-    color: @orange;
+    color: @text-muted;
 }
 
 #network.disconnected {
-    color: @danger;
+    color: @critical;
 }

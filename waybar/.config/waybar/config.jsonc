@@ -1,7 +1,7 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 34,
+    "height": 32,
 
     "modules-left": [
         "hyprland/workspaces"
@@ -32,26 +32,30 @@
 
     "hyprland/language": {
         "format-en": "EN",
-        "format-ru": "RU"
+        "format-ru": "RU",
+        "tooltip": false
     },
 
     "memory": {
         "interval": 5,
-        "format": "RAM {percentage}%"
+        "format": "RAM {percentage}%",
+        "tooltip": false
     },
 
     "pulseaudio": {
         "format": "VOL {volume}%",
-        "format-muted": "MUTE"
+        "format-muted": "MUTE",
+        "tooltip": false
     },
 
     "network": {
         "format-ethernet": "LAN",
         "format-wifi": "Wi-Fi",
-        "format-disconnected": "OFFLINE"
+        "format-disconnected": "OFFLINE",
+        "tooltip": false,
     },
 
     "tray": {
-        "spacing": 8
+        "spacing": 6
     }
 }
