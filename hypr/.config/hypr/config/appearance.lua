@@ -7,7 +7,7 @@ local colors = require("theme.colors")
 hl.config({
     general = {
         gaps_in  = 8,
-        gaps_out = 12,
+        gaps_out = 16,
 
         border_size = 1,
 
@@ -22,7 +22,7 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 4,
+        rounding       = 10,
         rounding_power = 2,
 
         active_opacity   = 1.0,
@@ -34,9 +34,9 @@ hl.config({
 
         blur = {
             enabled  = false,
-            size     = 3,
-            passes   = 2,
-            vibrancy = 0.16,
+            size     = 1,
+            passes   = 3,
+            vibrancy = 0.2,
         },
     },
 
