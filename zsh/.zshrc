@@ -17,4 +17,7 @@ setopt SHARE_HISTORY
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+ZSH_HIGHLIGHT_STYLES[path]='fg=#EBC99A'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#EBC99A'
+
 eval "$(starship init zsh)"
