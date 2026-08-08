@@ -1,0 +1,25 @@
+[colors.surface]
+base = "#07111F"
+raised = "#101A28"
+overlay = "#182230"
+hover = "#202C3A"
+
+[colors.text]
+primary = "#EBC99A"
+secondary = "#C8A982"
+muted = "#8F9187"
+on_accent = "#07111F"
+
+[colors.border]
+subtle = "#2B3441"
+strong = "#83553C"
+focus = "#C5662A"
+critical = "#C65E49"
+
+[colors.accent]
+primary = "#C5662A"
+secondary = "#2F8F80"
+
+[colors.status]
+warning = "#D49A57"
+critical = "#C65E49"
