@@ -1,9 +1,0 @@
-bibata-cursor-theme
-darkly-bin
-happ
-jetbrains-toolbox
-plasma6-applets-panel-colorizer
-plasma6-themes-colloid-git
-realesrgan-ncnn-vulkan-bin
-visual-studio-code-bin
-yay
