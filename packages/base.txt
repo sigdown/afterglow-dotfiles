@@ -47,8 +47,23 @@ slurp
 wl-clipboard
 libnotify
 
+brightnessctl
+playerctl
+
 udisks2
 udiskie
 
+thunar
+gvfs
+gvfs-mtp
+tumbler
+ffmpegthumbnailer
+file-roller
+thunar-archive-plugin
+imv
+zathura
+zathura-pdf-mupdf
+
+papirus-icon-theme
 noto-fonts
 ttf-jetbrains-mono-nerd
