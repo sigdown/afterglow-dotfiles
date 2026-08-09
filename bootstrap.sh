@@ -9,7 +9,9 @@ mapfile -t packages < <(
 
 sudo pacman -Syu --needed "${packages[@]}"
 
-stow --restow \
+python tools/build.py
+
+stow --restow --dir build --target "$HOME" \
     hypr \
     waybar \
     kitty \
@@ -19,7 +21,7 @@ stow --restow \
     starship \
     zsh
 
-chmod +x scripts/.local/bin/*
+chmod +x build/scripts/.local/bin/*
 
 xdg-user-dirs-update
 sudo systemctl enable --now NetworkManager

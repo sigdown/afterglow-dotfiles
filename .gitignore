@@ -10,7 +10,11 @@ secrets/
 *.bak
 
 # Images
-hypr/.config/hypr/wallpapers/*
+src/hypr/.config/hypr/wallpapers/*
 
 .local/
-__pycache__
+!src/scripts/.local/
+!src/scripts/.local/**
+build/
+__pycache__/
+*.pyc
