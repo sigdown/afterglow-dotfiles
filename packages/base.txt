@@ -67,3 +67,6 @@ zathura-pdf-mupdf
 papirus-icon-theme
 noto-fonts
 ttf-jetbrains-mono-nerd
+
+python
+python-jinja

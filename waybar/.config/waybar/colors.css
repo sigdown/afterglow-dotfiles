@@ -1,0 +1,20 @@
+@define-color surface-base #07111F;
+@define-color surface-raised #101A28;
+@define-color surface-overlay #182230;
+@define-color surface-hover #202C3A;
+
+@define-color text-primary #EBC99A;
+@define-color text-secondary #C8A982;
+@define-color text-muted #8F9187;
+@define-color text-on-accent #07111F;
+
+@define-color border-subtle #2B3441;
+@define-color border-strong #83553C;
+@define-color border-focus #C5662A;
+@define-color border-critical #C65E49;
+
+@define-color accent-primary #C5662A;
+@define-color accent-secondary #2F8F80;
+
+@define-color status-warning #D49A57;
+@define-color status-critical #C65E49;
