@@ -4,20 +4,20 @@ font_size 12.5
 window_padding_width 10
 placement_strategy center
 
-background #07111F
-foreground #EBC99A
+background {{ colors.surface.base }}
+foreground {{ colors.text.primary }}
 
-selection_background #202C3A
-selection_foreground #EBC99A
+selection_background {{ colors.surface.hover }}
+selection_foreground {{ colors.text.primary }}
 
-cursor #C5662A
-cursor_text_color #07111F
+cursor {{ colors.accent.primary }}
+cursor_text_color {{ colors.text.on_accent }}
 
-url_color #2F8F80
+url_color {{ colors.accent.secondary }}
 
-active_border_color #C5662A
-inactive_border_color #2B3441
-bell_border_color #C65E49
+active_border_color {{ colors.accent.primary }}
+inactive_border_color {{ colors.border.subtle }}
+bell_border_color {{ colors.status.critical }}
 
 color0  #182230
 color1  #C65E49

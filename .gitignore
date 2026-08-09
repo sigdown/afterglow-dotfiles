@@ -13,3 +13,4 @@ secrets/
 hypr/.config/hypr/wallpapers/*
 
 .local/
+__pycache__

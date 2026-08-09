@@ -1,0 +1,44 @@
+[main]
+font=JetBrainsMono Nerd Font:size=12
+use-bold=yes
+
+icons-enabled=yes
+icon-theme=Papirus-Dark
+
+terminal=kitty -e
+
+prompt="> "
+placeholder=type to launch...
+
+match-mode=fzf
+match-counter=yes
+
+lines=12
+width=64
+horizontal-pad=24
+vertical-pad=16
+inner-pad=8
+line-height=28
+
+layer=overlay
+
+[colors]
+background={{ colors.surface.raised | hex_alpha }}
+text={{ colors.text.secondary | hex_alpha }}
+prompt={{ colors.text.primary | hex_alpha }}
+placeholder={{ colors.text.muted | hex_alpha }}
+input={{ colors.text.primary | hex_alpha }}
+
+match={{ colors.accent.secondary | hex_alpha }}
+
+selection={{ colors.accent.primary | hex_alpha }}
+selection-text={{ colors.text.on_accent | hex_alpha }}
+selection-match={{ colors.text.on_accent | hex_alpha }}
+
+counter={{ colors.text.muted | hex_alpha }}
+border={{ colors.border.subtle | hex_alpha }}
+
+[border]
+width=1
+radius=10
+selection-radius=4

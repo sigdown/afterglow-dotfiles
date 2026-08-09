@@ -1,0 +1,42 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = false
+palette = "afterglow"
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$time
+$character"""
+
+[palettes.afterglow]
+base     = "{{ colors.surface.base }}"
+raised   = "{{ colors.surface.raised }}"
+overlay  = "{{ colors.surface.overlay }}"
+sand     = "{{ colors.text.primary }}"
+muted    = "{{ colors.text.muted }}"
+ember    = "{{ colors.accent.primary }}"
+sea      = "{{ colors.accent.secondary }}"
+critical = "{{ colors.status.critical }}"
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+format = "[](fg:overlay)[ $path ](fg:sand bg:overlay)[](fg:overlay) "
+
+[git_branch]
+symbol = " "
+format = "[](fg:overlay)[ $symbol$branch ](fg:sea bg:overlay)"
+
+[git_status]
+format = "[$all_status$ahead_behind ](fg:sea bg:overlay)[](fg:overlay) "
+
+[time]
+disabled = false
+time_format = "%H:%M"
+format = "[](fg:overlay)[  $time ](fg:muted bg:overlay)[](fg:overlay)"
+
+[character]
+success_symbol = "[└─](sea)"
+error_symbol   = "[└─](critical)"

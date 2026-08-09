@@ -15,7 +15,9 @@ stow --restow \
     kitty \
     fuzzel \
     mako \
-    scripts
+    scripts \
+    starship \
+    zsh
 
 chmod +x scripts/.local/bin/*
 

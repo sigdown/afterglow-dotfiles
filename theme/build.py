@@ -15,6 +15,18 @@ PALETTE_FILE = THEME_DIR / "palette.toml"
 TARGETS = {
     "waybar-colors.css.j2":
         "waybar/.config/waybar/colors.css",
+    "hypr-colors.lua.j2":
+        "hypr/.config/hypr/theme/colors.lua",
+    "fuzzel.ini.j2":
+        "fuzzel/.config/fuzzel/fuzzel.ini",
+    "mako-config.j2":
+        "mako/.config/mako/config",
+    "kitty.conf.j2":
+        "kitty/.config/kitty/kitty.conf",
+    "starship.toml.j2":
+        "starship/.config/starship.toml",
+    "zshrc.j2":
+        "zsh/.zshrc",
 }
 
 
@@ -24,7 +36,7 @@ def load_palette() -> dict:
 
 
 def create_environment() -> Environment:
-    return Environment(
+    env = Environment(
         loader=FileSystemLoader(TEMPLATES_DIR),
         undefined=StrictUndefined,
         autoescape=False,
@@ -32,6 +44,22 @@ def create_environment() -> Environment:
         trim_blocks=True,
         lstrip_blocks=True,
     )
+    env.filters["hex_alpha"] = hex_alpha
+    env.filters["with_alpha"] = with_alpha
+    env.filters["hypr_rgba"] = hypr_rgba
+    return env
+
+
+def hex_alpha(value: str, alpha: str = "FF") -> str:
+    return f"{value.removeprefix('#')}{alpha}"
+
+
+def with_alpha(value: str, alpha: str = "FF") -> str:
+    return f"{value}{alpha}"
+
+
+def hypr_rgba(value: str) -> str:
+    return f"rgba({hex_alpha(value)})"
 
 
 def render_target(

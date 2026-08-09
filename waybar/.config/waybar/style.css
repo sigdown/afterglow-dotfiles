@@ -41,7 +41,7 @@ window#waybar {
 #workspaces button.urgent {
     color: @status-critical;
     background: transparent;
-    border-top: 2px solid @critical;
+    border-top: 2px solid @status-critical;
 }
 
 #clock {

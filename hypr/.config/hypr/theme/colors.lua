@@ -1,7 +1,3 @@
--- Temporary semantic color bridge.
--- These values preserve the current config exactly.
--- We will replace them with the Afterglow palette in the next design pass.
-
 return {
     surface = {
         base    = "#07111F",
@@ -18,9 +14,9 @@ return {
     },
 
     border = {
-        subtle   = "rgba(2b3441ff)",
+        subtle   = "rgba(2B3441FF)",
         strong   = "#83553C",
-        focus    = "rgba(c5662aff)",
+        focus    = "rgba(C5662AFF)",
         critical = "#C65E49",
     },
 

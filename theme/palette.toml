@@ -3,6 +3,7 @@ base = "#07111F"
 raised = "#101A28"
 overlay = "#182230"
 hover = "#202C3A"
+critical = "#31262E"
 
 [colors.text]
 primary = "#EBC99A"

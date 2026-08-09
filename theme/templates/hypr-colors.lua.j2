@@ -1,0 +1,32 @@
+return {
+    surface = {
+        base    = "{{ colors.surface.base }}",
+        raised  = "{{ colors.surface.raised }}",
+        overlay = "{{ colors.surface.overlay }}",
+        hover   = "{{ colors.surface.hover }}",
+    },
+
+    text = {
+        primary   = "{{ colors.text.primary }}",
+        secondary = "{{ colors.text.secondary }}",
+        muted     = "{{ colors.text.muted }}",
+        on_accent = "{{ colors.text.on_accent }}",
+    },
+
+    border = {
+        subtle   = "{{ colors.border.subtle | hypr_rgba }}",
+        strong   = "{{ colors.border.strong }}",
+        focus    = "{{ colors.border.focus | hypr_rgba }}",
+        critical = "{{ colors.border.critical }}",
+    },
+
+    accent = {
+        primary   = "{{ colors.accent.primary }}",
+        secondary = "{{ colors.accent.secondary }}",
+    },
+
+    status = {
+        warning  = "{{ colors.status.warning }}",
+        critical = "{{ colors.status.critical }}",
+    },
+}
