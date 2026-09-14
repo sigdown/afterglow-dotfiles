@@ -9,7 +9,7 @@ hl.config({
         gaps_in  = 8,
         gaps_out = 16,
 
-        border_size = 1,
+        border_size = 2,
 
         col = {
             active_border   = colors.border.focus,
@@ -25,18 +25,18 @@ hl.config({
         rounding       = 10,
         rounding_power = 2,
 
-        active_opacity   = 1.0,
-        inactive_opacity = 1.0,
+        active_opacity   = 0.8,
+        inactive_opacity = 0.8,
 
         shadow = {
             enabled = false,
         },
 
         blur = {
-            enabled  = false,
-            size     = 1,
-            passes   = 3,
-            vibrancy = 0.2,
+            enabled  = true,
+            size     = 2,
+            passes   = 4,
+            vibrancy = 0.5,
         },
     },
 

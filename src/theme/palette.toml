@@ -14,7 +14,7 @@ on_accent = "#07111F"
 [colors.border]
 subtle = "#2B3441"
 strong = "#83553C"
-focus = "#C5662A"
+focus = "#C8A982"
 critical = "#C65E49"
 
 [colors.accent]
