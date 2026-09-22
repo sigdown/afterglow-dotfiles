@@ -1,0 +1,92 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = false
+
+scan_timeout = 30
+command_timeout = 500
+
+palette = "afterglow_fedora"
+
+
+format = """
+╭─ $directory\
+${custom.toolbox}\
+$git_branch\
+$git_status\
+$cmd_duration\
+$time
+╰─$character"""
+
+
+[palettes.afterglow_fedora]
+base = "#171b22"
+raised = "#20242c"
+overlay = "#293344"
+
+sand = "#e7d5bd"
+muted = "#8d97a6"
+
+sea = "#5ea6bd"
+blue = "#7897ce"
+
+peach = "#d2ab72"
+green = "#99bca2"
+
+critical = "#df8585"
+
+
+[directory]
+style = "bold sand"
+truncation_length = 3
+truncation_symbol = "…/"
+format = "[$path]($style)"
+
+
+[custom.toolbox]
+when = "test -f /run/.toolboxenv"
+command = "grep -oP 'name=\"\\K[^\"]+' /run/.containerenv"
+symbol = "  "
+style = "sea"
+format = "[$symbol$output]($style)"
+
+
+[git_branch]
+symbol = "  "
+style = "blue"
+format = "[$symbol$branch]($style)"
+
+
+[git_status]
+style = "peach"
+
+conflicted = "⚔"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+
+untracked = "?"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+format = " [$all_status$ahead_behind]($style)"
+
+
+[cmd_duration]
+min_time = 2000
+style = "muted"
+format = " 󰔛 [$duration]($style)"
+
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "muted"
+format = " 󰥔 [$time]($style)"
+
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](critical)"
+vimcmd_symbol = "[❮](blue)"

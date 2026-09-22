@@ -16,4 +16,8 @@ starship
 
 brightnessctl
 
+ttf-jetbrains-mono-nerd
 
+distrobox
+podman
+crun
