@@ -6,7 +6,7 @@ hl.monitor({
     output   = "",
     mode     = "preferred",
     position = "auto",
-    scale    = "auto",
+    scale    = 1.5,
 })
 
 -------------------
@@ -51,6 +51,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.config({
     misc = {
         force_default_wallpaper = -1,
-        disable_hyprland_logo   = false,
+        disable_hyprland_logo   = true,
+	disable_splash_rendering = true,
     },
 })
