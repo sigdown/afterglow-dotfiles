@@ -17,6 +17,8 @@ starship
 brightnessctl
 
 ttf-jetbrains-mono-nerd
+noto-fonts-cjk
+noto-fonts-emoji
 
 distrobox
 podman

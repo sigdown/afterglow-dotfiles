@@ -1,0 +1,156 @@
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*'
+zstyle ':completion:*' list-colors \
+  "ma=48;2;33;64;74;38;2;235;201;154"
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_SPACE
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt INTERACTIVE_COMMENTS
+
+bindkey -e
+
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[[3~' delete-char
+
+# ─────────────────────────────────────────────
+# Autosuggestions
+# ─────────────────────────────────────────────
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg={{ colors.text.muted }}'
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# ─────────────────────────────────────────────
+# Syntax highlighting
+# ─────────────────────────────────────────────
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
+
+ZSH_HIGHLIGHT_STYLES[default]='fg={{ colors.text.primary }}'
+
+# Commands
+ZSH_HIGHLIGHT_STYLES[command]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[function]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[alias]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[global-alias]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg={{ colors.accent.secondary }}'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg={{ colors.accent.primary }}'
+
+# Shell keywords
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg={{ colors.accent.primary }}'
+
+# Syntax / operators
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg={{ colors.text.muted }}'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg={{ colors.text.muted }}'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg={{ colors.text.secondary }}'
+
+# Arguments / strings
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg={{ colors.text.secondary }}'
+ZSH_HIGHLIGHT_STYLES[assign]='fg={{ colors.text.secondary }}'
+
+# Paths
+ZSH_HIGHLIGHT_STYLES[path]='fg={{ colors.text.primary }}'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg={{ colors.text.primary }}'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg={{ colors.text.muted }}'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg={{ colors.text.muted }}'
+
+# Expansions / comments
+ZSH_HIGHLIGHT_STYLES[globbing]='fg={{ colors.text.muted }}'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg={{ colors.text.muted }}'
+ZSH_HIGHLIGHT_STYLES[comment]='fg={{ colors.text.muted }}'
+
+# Invalid input
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg={{ colors.status.critical }},bold'
+
+# Cursor
+ZSH_HIGHLIGHT_STYLES[cursor]='fg={{ colors.cursor.text }},bg={{ colors.cursor.cursor }}'
+
+# ─────────────────────────────────────────────
+# Environment
+# ─────────────────────────────────────────────
+
+export EDITOR='nvim'
+export VISUAL='nvim'
+export LESS='-R'
+
+# ─────────────────────────────────────────────
+# Aliases
+# ─────────────────────────────────────────────
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# ─────────────────────────────────────────────
+# fzf
+# ─────────────────────────────────────────────
+
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+# ─────────────────────────────────────────────
+# PATH
+# ─────────────────────────────────────────────
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# ─────────────────────────────────────────────
+# Starship
+# ─────────────────────────────────────────────
+
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# ─────────────────────────────────────────────
+# Fastfetch
+# ─────────────────────────────────────────────
+
+if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
+  fastfetch -C examples/27
+fi
