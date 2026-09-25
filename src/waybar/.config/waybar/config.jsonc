@@ -1,7 +1,8 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 36,
+
+    "height": 34,
 
     "modules-left": [
         "hyprland/workspaces"
@@ -25,8 +26,8 @@
     },
 
     "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "{:%d.%m.%Y  %H:%M}",
+        "format": "[ {:%H:%M} ]",
+        "format-alt": "[ {:%d.%m.%Y  %H:%M} ]",
         "tooltip": false
     },
 
@@ -53,9 +54,5 @@
         "format-wifi": "Wi-Fi",
         "format-disconnected": "OFFLINE",
         "tooltip": false,
-    },
-
-    "tray": {
-        "spacing": 6
     }
 }

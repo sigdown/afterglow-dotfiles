@@ -9,9 +9,9 @@
 }
 
 window#waybar {
-    background: alpha(@surface-base, 1.0);
+    background: alpha(@surface-raised, 1.0);
     color: @text-secondary;
-    border-bottom: 1px solid @border-subtle;
+    border-bottom: 2px solid @border-subtle;
 }
 
 #workspaces {
