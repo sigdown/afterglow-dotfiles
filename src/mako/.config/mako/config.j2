@@ -1,40 +1,52 @@
 font=JetBrainsMono Nerd Font 11
 
-background-color={{ colors.surface.raised | with_alpha('F2') }}
-text-color={{ colors.text.primary | with_alpha }}
-progress-color=over {{ colors.accent.primary | with_alpha }}
+# Appearance
+background-color={{ colors.surface.raised }}
+text-color={{ colors.text.primary }}
+progress-color=over {{ colors.accent.primary }}
 
-width=360
-height=130
+border-size=2
+border-color={{ colors.border.subtle }}
+border-radius=10
 
-outer-margin=12
-margin=6
-padding=14
-
-border-size=1
-border-color={{ colors.border.subtle | with_alpha }}
-border-radius=6
-
-anchor=top-right
+# Position
+anchor=top-center
 layer=overlay
 
-icons=0
-markup=1
+# Size & spacing
+width=420
+outer-margin=12
+margin=8
+padding=12
 
+# Content
+icons=1
+markup=1
+format=<b>%s</b>\n%b
+
+# Notifications
 max-visible=4
 max-history=10
 
 default-timeout=5000
 ignore-timeout=1
 
-format=%s\n%b
+# Mouse actions
+# Left click: do nothing (no app activation)
+on-button-left=dismiss
+
+# Middle click: do nothing
+on-button-middle=none
+
+# Right click: dismiss
+on-button-right=dismiss
 
 [urgency=low]
-text-color={{ colors.text.secondary | with_alpha }}
+text-color={{ colors.text.secondary }}
 default-timeout=3000
 
 [urgency=critical]
-background-color={{ colors.status.critical | with_alpha('F2') }}
-text-color={{ colors.text.primary | with_alpha }}
-border-color={{ colors.status.critical | with_alpha }}
+background-color={{ colors.status.critical }}
+text-color={{ colors.text.primary }}
+border-color={{ colors.status.critical }}
 default-timeout=0
