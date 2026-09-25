@@ -154,3 +154,6 @@ fi
 if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
   fastfetch -C examples/27
 fi
+
+echo 'export ANDROID_HOME="$HOME/Android/Sdk"' >> ~/.zshrc
+echo 'export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"' >> ~/.zshrc

@@ -34,3 +34,29 @@ foreground = "#DCC8A6"
 [colors.cursor]
 cursor = "#C8A982"
 text = "#07111F"
+
+[colors.syntax]
+comment = "#858982"
+
+keyword = "#B96B38"
+function = "#C8A982"
+
+type = "#397C74"
+builtin = "#598A9B"
+
+string = "#629783"
+
+constant = "#B88A55"
+number = "#B88A55"
+
+variable = "#DCC8A6"
+parameter = "#BBA98D"
+
+property = "#C8A982"
+
+operator = "#BBA98D"
+punctuation = "#858982"
+
+macro = "#70513F"
+tag = "#397C74"
+attribute = "#C8A982"

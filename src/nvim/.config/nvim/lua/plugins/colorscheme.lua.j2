@@ -1,0 +1,221 @@
+return {
+  {
+    "folke/tokyonight.nvim",
+
+    opts = {
+      transparent = true,
+
+      styles = {
+        comments = { italic = true },
+        keywords = {},
+        functions = {},
+        variables = {},
+      },
+
+      on_colors = function(c)
+        c.bg = "{{ colors.surface.base }}"
+        c.bg_dark = "{{ colors.surface.base }}"
+        c.bg_float = "{{ colors.surface.raised }}"
+        c.bg_popup = "{{ colors.surface.raised }}"
+        c.bg_sidebar = "{{ colors.surface.raised }}"
+        c.bg_visual = "{{ colors.selection.background }}"
+
+        c.fg = "{{ colors.text.primary }}"
+        c.fg_dark = "{{ colors.text.secondary }}"
+        c.fg_gutter = "{{ colors.text.muted }}"
+
+        c.blue = "{{ colors.status.info }}"
+        c.cyan = "{{ colors.accent.secondary }}"
+        c.green = "{{ colors.status.success }}"
+        c.yellow = "{{ colors.status.warning }}"
+        c.orange = "{{ colors.accent.primary }}"
+        c.red = "{{ colors.status.critical }}"
+        c.magenta = "{{ colors.text.secondary }}"
+
+        c.border = "{{ colors.border.subtle }}"
+      end,
+
+      on_highlights = function(hl, c)
+        -- Base UI
+        hl.Normal = {
+          fg = "{{ colors.text.primary }}",
+          bg = "NONE",
+        }
+
+        hl.NormalFloat = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+
+        hl.FloatBorder = {
+          fg = "{{ colors.border.subtle }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+
+        hl.CursorLine = {
+          bg = "{{ colors.surface.raised }}",
+        }
+
+        hl.LineNr = {
+          fg = "{{ colors.text.muted }}",
+        }
+
+        hl.CursorLineNr = {
+          fg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
+
+        hl.Visual = {
+          bg = "{{ colors.selection.background }}",
+          fg = "{{ colors.selection.foreground }}",
+        }
+
+        hl.Search = {
+          bg = "{{ colors.accent.primary }}",
+          fg = "{{ colors.text.on_accent }}",
+        }
+
+        -- Syntax
+        hl["@comment"] = {
+          fg = "{{ colors.syntax.comment }}",
+          italic = true,
+        }
+
+        hl["@keyword"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+
+        hl["@function"] = {
+          fg = "{{ colors.syntax.function }}",
+        }
+
+        hl["@function.call"] = {
+          fg = "{{ colors.syntax.function }}",
+        }
+
+        hl["@method"] = {
+          fg = "{{ colors.syntax.function }}",
+        }
+
+        hl["@method.call"] = {
+          fg = "{{ colors.syntax.function }}",
+        }
+
+        hl["@type"] = {
+          fg = "{{ colors.syntax.type }}",
+        }
+
+        hl["@type.builtin"] = {
+          fg = "{{ colors.syntax.builtin }}",
+        }
+
+        hl["@constructor"] = {
+          fg = "{{ colors.syntax.type }}",
+        }
+
+        hl["@variable"] = {
+          fg = "{{ colors.syntax.variable }}",
+        }
+
+        hl["@variable.parameter"] = {
+          fg = "{{ colors.syntax.parameter }}",
+        }
+
+        hl["@variable.member"] = {
+          fg = "{{ colors.syntax.property }}",
+        }
+
+        hl["@property"] = {
+          fg = "{{ colors.syntax.property }}",
+        }
+
+        hl["@constant"] = {
+          fg = "{{ colors.syntax.constant }}",
+        }
+
+        hl["@constant.builtin"] = {
+          fg = "{{ colors.syntax.builtin }}",
+        }
+
+        hl["@number"] = {
+          fg = "{{ colors.syntax.number }}",
+        }
+
+        hl["@string"] = {
+          fg = "{{ colors.syntax.string }}",
+        }
+
+        hl["@string.escape"] = {
+          fg = "{{ colors.accent.primary }}",
+        }
+
+        hl["@operator"] = {
+          fg = "{{ colors.syntax.operator }}",
+        }
+
+        hl["@punctuation.delimiter"] = {
+          fg = "{{ colors.syntax.punctuation }}",
+        }
+
+        hl["@punctuation.bracket"] = {
+          fg = "{{ colors.syntax.punctuation }}",
+        }
+
+        hl["@attribute"] = {
+          fg = "{{ colors.syntax.attribute }}",
+        }
+
+        hl["@tag"] = {
+          fg = "{{ colors.syntax.tag }}",
+        }
+
+        -- Diagnostics
+        hl.DiagnosticError = {
+          fg = "{{ colors.status.critical }}",
+        }
+
+        hl.DiagnosticWarn = {
+          fg = "{{ colors.status.warning }}",
+        }
+
+        hl.DiagnosticInfo = {
+          fg = "{{ colors.status.info }}",
+        }
+
+        hl.DiagnosticHint = {
+          fg = "{{ colors.status.success }}",
+        }
+
+        -- Git
+        hl.GitSignsAdd = {
+          fg = "{{ colors.status.success }}",
+        }
+
+        hl.GitSignsChange = {
+          fg = "{{ colors.status.warning }}",
+        }
+
+        hl.GitSignsDelete = {
+          fg = "{{ colors.status.critical }}",
+        }
+
+        -- Other UI
+        hl.WinSeparator = {
+          fg = "{{ colors.border.subtle }}",
+        }
+
+        hl.Title = {
+          fg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
+      end,
+    },
+  },
+
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "tokyonight",
+    },
+  },
+}
