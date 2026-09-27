@@ -5,48 +5,47 @@ local colors = require("theme.colors")
 -----------------------
 
 hl.config({
-  general = {
-    gaps_in          = 4,
-    gaps_out         = 8,
+	general = {
+		gaps_in = 4,
+		gaps_out = 12,
 
-    border_size      = 2,
+		border_size = 2,
 
-    col              = {
-      active_border   = colors.border.focus,
-      inactive_border = colors.border.subtle,
-    },
+		col = {
+			active_border = colors.border.focus,
+			inactive_border = colors.border.subtle,
+		},
 
-    resize_on_border = false,
-    allow_tearing    = false,
-    layout           = "dwindle",
-  },
+		resize_on_border = false,
+		allow_tearing = false,
+		layout = "dwindle",
+	},
 
-  decoration = {
-    rounding         = 10,
-    rounding_power   = 2,
+	decoration = {
+		rounding = 6,
+		rounding_power = 2,
 
-    active_opacity   = 1.0,
-    inactive_opacity = 1.0,
+		active_opacity = 1.0,
+		inactive_opacity = 1.0,
 
-    shadow           = {
-      enabled = false,
-    },
+		shadow = {
+			enabled = false,
+		},
 
-    blur             = {
-      enabled  = true,
-      size     = 7,
-      passes   = 5,
-      vibrancy = 0.4,
-    },
-  },
+		blur = {
+			enabled = true,
+			size = 7,
+			passes = 5,
+			vibrancy = 0.4,
+		},
+	},
 
-  animations = {
-    enabled = true,
-  },
+	animations = {
+		enabled = true,
+	},
 })
-
 --------------------
----- ANIMATIONS ----
+---- ANIMATION---------------
 --------------------
 
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
@@ -55,46 +54,60 @@ hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1 } } })
 hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 
-hl.curve("easy", { type = "spring", mass = 1, stiffness = 238.1191, dampening = 24.21279333 })
+hl.curve("animeFocus", { type = "bezier", points = { { 0.33, 0.0 }, { 0.67, 1.0 } } })
+hl.curve("animeTactical", { type = "bezier", points = { { 0.1, 0.8 }, { 0.1, 1.0 } } })
 
 hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
-hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows", enabled = true, speed = 4.79, spring = "easy" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, spring = "easy", style = "popin 87%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
-hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
-hl.animation({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
-hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.21, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
+hl.animation({ leaf = "border", enabled = true, speed = 2.0, bezier = "easeOutQuint" })
 
+hl.animation({ leaf = "windows", enabled = true, speed = 2.5, bezier = "animeFocus" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 2.0, bezier = "animeTactical", style = "slide" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.5, bezier = "animeFocus", style = "slide" })
+
+hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.0, bezier = "linear" })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.0, bezier = "linear" })
+hl.animation({ leaf = "fade", enabled = true, speed = 1.0, bezier = "linear" })
+
+hl.animation({ leaf = "layers", enabled = true, speed = 3.5, bezier = "animeFocus" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = 3.5, bezier = "animeTactical", style = "popin 85%" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 3.5, bezier = "animeFocus", style = "popin 85%" })
+hl.animation({ leaf = "fadeLayersIn", enabled = false })
+hl.animation({ leaf = "fadeLayersOut", enabled = false })
+
+hl.animation({ leaf = "workspaces", enabled = true, speed = 2.5, bezier = "animeFocus", style = "slide" })
+hl.animation({ leaf = "workspacesIn", enabled = true, speed = 2.5, bezier = "animeFocus", style = "slide" })
+hl.animation({ leaf = "workspacesOut", enabled = true, speed = 2.5, bezier = "animeFocus", style = "slide" })
+
+hl.animation({ leaf = "zoomFactor", enabled = true, speed = 2.0, bezier = "quick" })
+
+hl.layer_rule({
+	match = { namespace = "fuzzel" },
+	ignore_alpha = 0.0,
+})
+
+hl.layer_rule({
+	match = { namespace = "mako" },
+	ignore_alpha = 0.0,
+})
 -----------------
 ---- LAYOUTS ----
 -----------------
-
 hl.config({
-  dwindle = {
-    preserve_split = true,
-  },
+	dwindle = {
+		preserve_split = true,
+	},
 })
 
 hl.config({
-  master = {
-    new_status = "master",
-  },
+	master = {
+		new_status = "master",
+	},
 })
 
 hl.config({
-  scrolling = {
-    fullscreen_on_one_column = true,
-  },
+	scrolling = {
+		fullscreen_on_one_column = true,
+	},
 })
 
 -------------------------
