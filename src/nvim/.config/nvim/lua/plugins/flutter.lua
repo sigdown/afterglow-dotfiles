@@ -8,7 +8,7 @@ return {
     },
     config = function()
       require("flutter-tools").setup({
-        flutter_path = "fvm",
+        flutter_path = "fvm flutter",
       })
     end,
   },

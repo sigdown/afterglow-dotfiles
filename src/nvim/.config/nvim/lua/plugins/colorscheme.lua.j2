@@ -3,6 +3,12 @@ return {
     "folke/tokyonight.nvim",
 
     opts = {
+      -- Keep the look deterministic. Tokyo Night's current default is moon,
+      -- but we explicitly select it because this file is our own theme layer.
+      style = "moon",
+
+      -- The main editor stays transparent; floating/sidebar surfaces are
+      -- explicitly colored below.
       transparent = true,
 
       styles = {
@@ -10,204 +16,848 @@ return {
         keywords = {},
         functions = {},
         variables = {},
+        sidebars = "dark",
+        floats = "dark",
+      },
+
+      -- Generate all bundled plugin groups. We then override the important
+      -- ones explicitly so there is no surprise from an omitted plugin set.
+      plugins = {
+        all = true,
       },
 
       on_colors = function(c)
+        -- ===== Full Tokyo Night source-palette override =====
+        -- Nothing important below is left to Tokyo Night's original moon
+        -- palette. These are the source colors from which its highlight groups
+        -- are derived.
+
+        -- Surfaces
         c.bg = "{{ colors.surface.base }}"
         c.bg_dark = "{{ colors.surface.base }}"
-        c.bg_float = "{{ colors.surface.raised }}"
-        c.bg_popup = "{{ colors.surface.raised }}"
-        c.bg_sidebar = "{{ colors.surface.raised }}"
-        c.bg_visual = "{{ colors.selection.background }}"
+        c.bg_dark1 = "{{ colors.surface.base }}"
+        c.bg_highlight = "{{ colors.surface.hover }}"
 
+        -- Sky blues: reserved for function-definition syntax and blue UI hints.
+        c.blue = "{{ colors.accent.sky }}"
+        c.blue0 = "{{ colors.selection.background }}"
+        c.blue1 = "{{ colors.accent.sky }}"
+        c.blue2 = "{{ colors.status.info }}"
+        c.blue5 = "{{ colors.accent.sky_soft }}"
+        c.blue6 = "{{ colors.accent.sky_bright }}"
+        c.blue7 = "{{ colors.border.subtle }}"
+
+        -- Neutral / text colors
+        c.comment = "{{ colors.syntax.comment }}"
+        c.dark3 = "{{ colors.text.muted }}"
+        c.dark5 = "{{ colors.text.secondary }}"
         c.fg = "{{ colors.text.primary }}"
         c.fg_dark = "{{ colors.text.secondary }}"
         c.fg_gutter = "{{ colors.text.muted }}"
 
-        c.blue = "{{ colors.status.info }}"
-        c.cyan = "{{ colors.accent.secondary }}"
+        -- Teal family
         c.green = "{{ colors.status.success }}"
-        c.yellow = "{{ colors.status.warning }}"
-        c.orange = "{{ colors.accent.primary }}"
-        c.red = "{{ colors.status.critical }}"
-        c.magenta = "{{ colors.text.secondary }}"
+        c.green1 = "{{ colors.accent.secondary }}"
+        c.green2 = "{{ colors.status.info }}"
+        c.teal = "{{ colors.accent.secondary }}"
 
+        -- Warm accents
+        c.magenta = "{{ colors.text.secondary }}"
+        c.magenta2 = "{{ colors.accent.primary }}"
+        c.orange = "{{ colors.accent.primary }}"
+        c.purple = "{{ colors.accent.primary }}"
+        c.red = "{{ colors.status.critical }}"
+        c.red1 = "{{ colors.status.critical }}"
+        c.yellow = "{{ colors.status.warning }}"
+
+        c.terminal_black = "{{ colors.surface.base }}"
+
+        -- Git source colors
+        c.git = {
+          add = "{{ colors.status.success }}",
+          change = "{{ colors.status.warning }}",
+          delete = "{{ colors.status.critical }}",
+        }
+
+        -- Derived Tokyo Night values that are commonly visible in the UI.
+        c.bg_popup = "{{ colors.surface.popup }}"
+        c.bg_statusline = "{{ colors.surface.raised }}"
+        c.bg_sidebar = "{{ colors.surface.base }}"
+        c.bg_float = "{{ colors.surface.raised }}"
+        c.bg_visual = "{{ colors.selection.background }}"
+        c.bg_search = "{{ colors.accent.primary }}"
+        c.fg_sidebar = "{{ colors.text.primary }}"
+        c.fg_float = "{{ colors.text.primary }}"
+        c.error = "{{ colors.status.critical }}"
+        c.warning = "{{ colors.status.warning }}"
+        c.info = "{{ colors.status.info }}"
+        c.hint = "{{ colors.accent.secondary }}"
+        c.todo = "{{ colors.accent.sky }}"
+
+        -- Rebuild every value that Tokyo Night normally derives BEFORE
+        -- calling on_colors(), so none of those derived values can retain
+        -- the original moon palette.
+        c.black = "{{ colors.text.on_accent }}"
+        c.diff = {
+          add = "{{ colors.status.success }}",
+          delete = "{{ colors.status.critical }}",
+          change = "{{ colors.status.info }}",
+          text = "{{ colors.accent.sky }}",
+        }
+        c.git.ignore = "{{ colors.text.disabled }}"
         c.border = "{{ colors.border.subtle }}"
+        c.border_highlight = "{{ colors.border.focus }}"
+        c.terminal = {
+          black = "{{ colors.text.on_accent }}",
+          black_bright = "{{ colors.surface.overlay }}",
+          red = "{{ colors.status.critical }}",
+          red_bright = "{{ colors.border.critical }}",
+          green = "{{ colors.status.success }}",
+          green_bright = "{{ colors.accent.secondary }}",
+          yellow = "{{ colors.status.warning }}",
+          yellow_bright = "{{ colors.accent.primary }}",
+          blue = "{{ colors.accent.sky_soft }}",
+          blue_bright = "{{ colors.accent.sky_bright }}",
+          magenta = "{{ colors.text.secondary }}",
+          magenta_bright = "{{ colors.text.primary }}",
+          cyan = "{{ colors.accent.secondary }}",
+          cyan_bright = "{{ colors.accent.sky_bright }}",
+          white = "{{ colors.text.secondary }}",
+          white_bright = "{{ colors.text.primary }}",
+        }
       end,
 
       on_highlights = function(hl, c)
-        -- Base UI
+        -- ===== Core UI =====
         hl.Normal = {
           fg = "{{ colors.text.primary }}",
           bg = "NONE",
         }
-
+        hl.NormalNC = {
+          fg = "{{ colors.text.primary }}",
+          bg = "NONE",
+        }
         hl.NormalFloat = {
           fg = "{{ colors.text.primary }}",
           bg = "{{ colors.surface.raised }}",
         }
-
         hl.FloatBorder = {
           fg = "{{ colors.border.subtle }}",
           bg = "{{ colors.surface.raised }}",
         }
-
-        hl.CursorLine = {
+        hl.FloatTitle = {
+          fg = "{{ colors.text.primary }}",
           bg = "{{ colors.surface.raised }}",
+          bold = true,
         }
-
+        hl.CursorLine = {
+          bg = "{{ colors.surface.hover }}",
+        }
+        hl.CursorColumn = {
+          bg = "{{ colors.surface.hover }}",
+        }
         hl.LineNr = {
           fg = "{{ colors.text.muted }}",
         }
-
+        hl.LineNrAbove = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.LineNrBelow = {
+          fg = "{{ colors.text.muted }}",
+        }
         hl.CursorLineNr = {
           fg = "{{ colors.accent.primary }}",
           bold = true,
         }
+        hl.EndOfBuffer = {
+          fg = "{{ colors.surface.base }}",
+        }
+        hl.NonText = {
+          fg = "{{ colors.text.disabled }}",
+        }
+        hl.Whitespace = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.SpecialKey = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.SignColumn = {
+          fg = "{{ colors.text.muted }}",
+          bg = "NONE",
+        }
+        hl.SignColumnSB = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.VertSplit = {
+          fg = "{{ colors.border.subtle }}",
+        }
+        hl.WinSeparator = {
+          fg = "{{ colors.border.subtle }}",
+          bold = false,
+        }
+        hl.StatusLine = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.StatusLineNC = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.TabLine = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.TabLineFill = {
+          bg = "NONE",
+        }
+        hl.TabLineSel = {
+          fg = "{{ colors.text.on_accent }}",
+          bg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
+        hl.Title = {
+          fg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
+        hl.Question = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.MoreMsg = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.ModeMsg = {
+          fg = "{{ colors.text.secondary }}",
+          bold = true,
+        }
+        hl.MsgArea = {
+          fg = "{{ colors.text.secondary }}",
+        }
+        hl.WildMenu = {
+          bg = "{{ colors.selection.background }}",
+          fg = "{{ colors.text.primary }}",
+        }
 
+        -- Selection / search / cursor.
         hl.Visual = {
           bg = "{{ colors.selection.background }}",
           fg = "{{ colors.selection.foreground }}",
         }
-
+        hl.VisualNOS = {
+          bg = "{{ colors.selection.background }}",
+          fg = "{{ colors.selection.foreground }}",
+        }
         hl.Search = {
           bg = "{{ colors.accent.primary }}",
           fg = "{{ colors.text.on_accent }}",
         }
+        hl.IncSearch = {
+          bg = "{{ colors.border.focus }}",
+          fg = "{{ colors.text.on_accent }}",
+        }
+        hl.CurSearch = "IncSearch"
+        hl.Cursor = {
+          fg = "{{ colors.text.on_accent }}",
+          bg = "{{ colors.cursor.cursor }}",
+        }
+        hl.lCursor = "Cursor"
+        hl.CursorIM = "Cursor"
+        hl.Pmenu = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.popup }}",
+        }
+        hl.PmenuSel = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.hover }}",
+        }
+        hl.PmenuMatch = {
+          fg = "{{ colors.accent.sky }}",
+          bg = "{{ colors.surface.popup }}",
+          bold = true,
+        }
+        hl.PmenuMatchSel = {
+          fg = "{{ colors.accent.sky_bright }}",
+          bg = "{{ colors.surface.hover }}",
+          bold = true,
+        }
+        hl.PmenuSbar = {
+          bg = "{{ colors.surface.overlay }}",
+        }
+        hl.PmenuThumb = {
+          bg = "{{ colors.text.muted }}",
+        }
+        hl.QuickFixLine = {
+          bg = "{{ colors.selection.background }}",
+          bold = true,
+        }
+        hl.MatchParen = {
+          fg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
 
-        -- Syntax
-        hl["@comment"] = {
+        -- ===== Classic Vim syntax groups =====
+        hl.Comment = {
           fg = "{{ colors.syntax.comment }}",
           italic = true,
         }
+        hl.Constant = {
+          fg = "{{ colors.syntax.constant }}",
+        }
+        hl.String = {
+          fg = "{{ colors.syntax.string }}",
+        }
+        hl.Character = {
+          fg = "{{ colors.syntax.string }}",
+        }
+        hl.Number = {
+          fg = "{{ colors.syntax.number }}",
+        }
+        hl.Float = {
+          fg = "{{ colors.syntax.number }}",
+        }
+        hl.Boolean = {
+          fg = "{{ colors.syntax.boolean }}",
+        }
+        hl.Identifier = {
+          fg = "{{ colors.syntax.variable }}",
+        }
+        hl.Function = {
+          fg = "{{ colors.syntax.function }}",
+        }
+        hl.Statement = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Keyword = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Conditional = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Repeat = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Exception = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.StorageClass = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.PreProc = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Include = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Type = {
+          fg = "{{ colors.syntax.type }}",
+        }
+        hl.Special = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.SpecialChar = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.Operator = {
+          fg = "{{ colors.syntax.operator }}",
+        }
+        hl.Delimiter = {
+          fg = "{{ colors.syntax.punctuation }}",
+        }
+        hl.Tag = {
+          fg = "{{ colors.syntax.tag }}",
+        }
+        hl.Error = {
+          fg = "{{ colors.status.critical }}",
+        }
+        hl.Todo = {
+          bg = "{{ colors.status.warning }}",
+          fg = "{{ colors.text.on_accent }}",
+          bold = true,
+        }
+        hl.Define = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl.Macro = {
+          fg = "{{ colors.syntax.macro }}",
+        }
 
+        -- ===== Tree-sitter =====
+        hl["@none"] = {}
+        hl["@comment"] = hl.Comment
+        hl["@comment.error"] = { fg = "{{ colors.status.critical }}" }
+        hl["@comment.warning"] = { fg = "{{ colors.status.warning }}" }
+        hl["@comment.info"] = { fg = "{{ colors.status.info }}" }
+        hl["@comment.hint"] = { fg = "{{ colors.status.success }}" }
+        hl["@comment.todo"] = { fg = "{{ colors.accent.sky }}" }
+
+        hl["@constant"] = { fg = "{{ colors.syntax.constant }}" }
+        hl["@constant.builtin"] = { fg = "{{ colors.syntax.boolean }}" }
+        hl["@constant.macro"] = { fg = "{{ colors.syntax.macro }}" }
+
+        hl["@string"] = { fg = "{{ colors.syntax.string }}" }
+        hl["@string.documentation"] = { fg = "{{ colors.syntax.string }}" }
+        hl["@string.escape"] = { fg = "{{ colors.syntax.string_escape }}" }
+        hl["@string.regexp"] = { fg = "{{ colors.syntax.regex }}" }
+
+        hl["@number"] = { fg = "{{ colors.syntax.number }}" }
+        hl["@number.float"] = { fg = "{{ colors.syntax.number }}" }
+        hl["@boolean"] = { fg = "{{ colors.syntax.boolean }}" }
+        hl["@character"] = { fg = "{{ colors.syntax.string }}" }
+        hl["@character.special"] = { fg = "{{ colors.syntax.string_escape }}" }
+
+        -- The key fix for Python's `def`: sky blue, while the function name
+        -- itself remains the warm primary text color.
+        hl["@keyword.function"] = {
+          fg = "{{ colors.syntax.keyword_function }}",
+        }
         hl["@keyword"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.return"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.conditional"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.repeat"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.exception"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.storage"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.import"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.operator"] = {
+          fg = "{{ colors.syntax.operator }}",
+        }
+        hl["@keyword.coroutine"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.debug"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.directive"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@keyword.directive.define"] = {
           fg = "{{ colors.syntax.keyword }}",
         }
 
         hl["@function"] = {
           fg = "{{ colors.syntax.function }}",
         }
-
         hl["@function.call"] = {
           fg = "{{ colors.syntax.function }}",
         }
-
-        hl["@method"] = {
+        hl["@function.method"] = {
           fg = "{{ colors.syntax.function }}",
         }
-
-        hl["@method.call"] = {
+        hl["@function.method.call"] = {
           fg = "{{ colors.syntax.function }}",
+        }
+        -- Prevent builtins such as `free` from inheriting Tokyo Night's old
+        -- bright blue. This is the other main overlap fix.
+        hl["@function.builtin"] = {
+          fg = "{{ colors.syntax.function }}",
+        }
+        hl["@function.macro"] = {
+          fg = "{{ colors.syntax.macro }}",
         }
 
         hl["@type"] = {
           fg = "{{ colors.syntax.type }}",
         }
-
+        -- `size_t` and other built-in types stay teal, not Tokyo Night blue.
         hl["@type.builtin"] = {
           fg = "{{ colors.syntax.builtin }}",
         }
-
-        hl["@constructor"] = {
+        hl["@type.definition"] = {
           fg = "{{ colors.syntax.type }}",
+        }
+        hl["@type.qualifier"] = {
+          fg = "{{ colors.syntax.keyword }}",
+        }
+        hl["@constructor"] = {
+          fg = "{{ colors.syntax.constructor }}",
         }
 
         hl["@variable"] = {
           fg = "{{ colors.syntax.variable }}",
         }
-
         hl["@variable.parameter"] = {
           fg = "{{ colors.syntax.parameter }}",
         }
-
         hl["@variable.member"] = {
           fg = "{{ colors.syntax.property }}",
         }
-
+        hl["@variable.builtin"] = {
+          fg = "{{ colors.syntax.type }}",
+        }
         hl["@property"] = {
           fg = "{{ colors.syntax.property }}",
-        }
-
-        hl["@constant"] = {
-          fg = "{{ colors.syntax.constant }}",
-        }
-
-        hl["@constant.builtin"] = {
-          fg = "{{ colors.syntax.builtin }}",
-        }
-
-        hl["@number"] = {
-          fg = "{{ colors.syntax.number }}",
-        }
-
-        hl["@string"] = {
-          fg = "{{ colors.syntax.string }}",
-        }
-
-        hl["@string.escape"] = {
-          fg = "{{ colors.accent.primary }}",
         }
 
         hl["@operator"] = {
           fg = "{{ colors.syntax.operator }}",
         }
-
+        hl["@punctuation.bracket"] = {
+          fg = "{{ colors.syntax.punctuation }}",
+        }
         hl["@punctuation.delimiter"] = {
           fg = "{{ colors.syntax.punctuation }}",
         }
-
-        hl["@punctuation.bracket"] = {
+        hl["@punctuation.special"] = {
           fg = "{{ colors.syntax.punctuation }}",
         }
 
         hl["@attribute"] = {
           fg = "{{ colors.syntax.attribute }}",
         }
-
         hl["@tag"] = {
           fg = "{{ colors.syntax.tag }}",
         }
-
-        -- Diagnostics
-        hl.DiagnosticError = {
-          fg = "{{ colors.status.critical }}",
+        hl["@tag.attribute"] = {
+          fg = "{{ colors.syntax.property }}",
+        }
+        hl["@tag.delimiter"] = {
+          fg = "{{ colors.syntax.punctuation }}",
+        }
+        hl["@module"] = {
+          fg = "{{ colors.syntax.namespace }}",
+        }
+        hl["@module.builtin"] = {
+          fg = "{{ colors.syntax.type }}",
+        }
+        hl["@namespace.builtin"] = {
+          fg = "{{ colors.syntax.type }}",
         }
 
-        hl.DiagnosticWarn = {
-          fg = "{{ colors.status.warning }}",
+        hl["@markup.link"] = {
+          fg = "{{ colors.accent.sky }}",
+          underline = true,
         }
-
-        hl.DiagnosticInfo = {
-          fg = "{{ colors.status.info }}",
+        hl["@markup.link.label"] = {
+          fg = "{{ colors.accent.sky }}",
         }
-
-        hl.DiagnosticHint = {
-          fg = "{{ colors.status.success }}",
+        hl["@markup.link.url"] = {
+          fg = "{{ colors.accent.sky_bright }}",
+          underline = true,
         }
-
-        -- Git
-        hl.GitSignsAdd = {
-          fg = "{{ colors.status.success }}",
-        }
-
-        hl.GitSignsChange = {
-          fg = "{{ colors.status.warning }}",
-        }
-
-        hl.GitSignsDelete = {
-          fg = "{{ colors.status.critical }}",
-        }
-
-        -- Other UI
-        hl.WinSeparator = {
-          fg = "{{ colors.border.subtle }}",
-        }
-
-        hl.Title = {
+        hl["@markup.heading"] = {
           fg = "{{ colors.accent.primary }}",
           bold = true,
         }
+        hl["@markup.list"] = {
+          fg = "{{ colors.accent.sky_soft }}",
+        }
+        hl["@markup.list.markdown"] = {
+          fg = "{{ colors.accent.primary }}",
+          bold = true,
+        }
+        hl["@markup.raw"] = {
+          fg = "{{ colors.syntax.string }}",
+        }
+        hl["@markup.raw.markdown_inline"] = {
+          fg = "{{ colors.syntax.string }}",
+          bg = "{{ colors.surface.base }}",
+        }
+
+        -- ===== LSP semantic tokens =====
+        -- These are explicit because semantic highlighting can otherwise
+        -- reintroduce source colors not covered by the normal Tree-sitter
+        -- captures.
+        hl["@lsp.type.boolean"] = { fg = "{{ colors.syntax.boolean }}" }
+        hl["@lsp.type.builtinType"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.type.comment"] = { fg = "{{ colors.syntax.comment }}", italic = true }
+        hl["@lsp.type.decorator"] = { fg = "{{ colors.syntax.attribute }}" }
+        hl["@lsp.type.enum"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.enumMember"] = { fg = "{{ colors.syntax.constant }}" }
+        hl["@lsp.type.escapeSequence"] = { fg = "{{ colors.syntax.string_escape }}" }
+        hl["@lsp.type.formatSpecifier"] = { fg = "{{ colors.syntax.punctuation }}" }
+        hl["@lsp.type.generic"] = { fg = "{{ colors.syntax.variable }}" }
+        hl["@lsp.type.interface"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.keyword"] = { fg = "{{ colors.syntax.keyword }}" }
+        hl["@lsp.type.lifetime"] = { fg = "{{ colors.syntax.keyword }}" }
+        hl["@lsp.type.namespace"] = { fg = "{{ colors.syntax.namespace }}" }
+        hl["@lsp.type.namespace.python"] = { fg = "{{ colors.syntax.namespace }}" }
+        hl["@lsp.type.number"] = { fg = "{{ colors.syntax.number }}" }
+        hl["@lsp.type.operator"] = { fg = "{{ colors.syntax.operator }}" }
+        hl["@lsp.type.parameter"] = { fg = "{{ colors.syntax.parameter }}" }
+        hl["@lsp.type.property"] = { fg = "{{ colors.syntax.property }}" }
+        hl["@lsp.type.selfKeyword"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.selfTypeKeyword"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.string"] = { fg = "{{ colors.syntax.string }}" }
+        hl["@lsp.type.typeAlias"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.typeParameter"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.struct"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.type.variable"] = { fg = "{{ colors.syntax.variable }}" }
+        hl["@lsp.type.unresolvedReference"] = {
+          undercurl = true,
+          sp = "{{ colors.status.critical }}",
+        }
+        hl["@lsp.typemod.class.defaultLibrary"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.typemod.enum.defaultLibrary"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.typemod.enumMember.defaultLibrary"] = { fg = "{{ colors.syntax.constant }}" }
+        hl["@lsp.typemod.function.defaultLibrary"] = { fg = "{{ colors.syntax.function }}" }
+        hl["@lsp.typemod.keyword.async"] = { fg = "{{ colors.syntax.keyword }}" }
+        hl["@lsp.typemod.keyword.injected"] = { fg = "{{ colors.syntax.keyword }}" }
+        hl["@lsp.typemod.macro.defaultLibrary"] = { fg = "{{ colors.syntax.macro }}" }
+        hl["@lsp.typemod.method.defaultLibrary"] = { fg = "{{ colors.syntax.function }}" }
+        hl["@lsp.typemod.operator.injected"] = { fg = "{{ colors.syntax.operator }}" }
+        hl["@lsp.typemod.string.injected"] = { fg = "{{ colors.syntax.string }}" }
+        hl["@lsp.typemod.struct.defaultLibrary"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.typemod.type.defaultLibrary"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.typemod.typeAlias.defaultLibrary"] = { fg = "{{ colors.syntax.builtin }}" }
+        hl["@lsp.typemod.variable.callable"] = { fg = "{{ colors.syntax.function }}" }
+        hl["@lsp.typemod.variable.defaultLibrary"] = { fg = "{{ colors.syntax.type }}" }
+        hl["@lsp.typemod.variable.injected"] = { fg = "{{ colors.syntax.variable }}" }
+        hl["@lsp.typemod.variable.static"] = { fg = "{{ colors.syntax.constant }}" }
+
+        -- ===== Diagnostics =====
+        hl.DiagnosticError = { fg = "{{ colors.status.critical }}" }
+        hl.DiagnosticWarn = { fg = "{{ colors.status.warning }}" }
+        hl.DiagnosticInfo = { fg = "{{ colors.status.info }}" }
+        hl.DiagnosticHint = { fg = "{{ colors.status.success }}" }
+        hl.DiagnosticUnnecessary = { fg = "{{ colors.text.disabled }}" }
+        hl.DiagnosticVirtualTextError = {
+          fg = "{{ colors.status.critical }}",
+          bg = "{{ colors.surface.alert }}",
+        }
+        hl.DiagnosticVirtualTextWarn = {
+          fg = "{{ colors.status.warning }}",
+          bg = "{{ colors.surface.alert }}",
+        }
+        hl.DiagnosticVirtualTextInfo = {
+          fg = "{{ colors.status.info }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.DiagnosticVirtualTextHint = {
+          fg = "{{ colors.status.success }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.DiagnosticUnderlineError = {
+          undercurl = true,
+          sp = "{{ colors.status.critical }}",
+        }
+        hl.DiagnosticUnderlineWarn = {
+          undercurl = true,
+          sp = "{{ colors.status.warning }}",
+        }
+        hl.DiagnosticUnderlineInfo = {
+          undercurl = true,
+          sp = "{{ colors.status.info }}",
+        }
+        hl.DiagnosticUnderlineHint = {
+          undercurl = true,
+          sp = "{{ colors.status.success }}",
+        }
+
+        -- ===== Git =====
+        hl.GitSignsAdd = { fg = "{{ colors.status.success }}" }
+        hl.GitSignsChange = { fg = "{{ colors.status.warning }}" }
+        hl.GitSignsDelete = { fg = "{{ colors.status.critical }}" }
+        hl.diffAdded = { fg = "{{ colors.status.success }}" }
+        hl.diffChanged = { fg = "{{ colors.status.warning }}" }
+        hl.diffRemoved = { fg = "{{ colors.status.critical }}" }
+
+        -- ===== Neo-tree =====
+        -- Tokyo Night's own Neo-tree module uses bg_sidebar and also derives a
+        -- darker tab color. We explicitly neutralize the large sidebar surface
+        -- so it does not become a saturated blue panel.
+        hl.NeoTreeNormal = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeNormalNC = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeSignColumn = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeStatusLine = {
+          fg = "{{ colors.text.secondary }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeStatusLineNC = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeFileName = {
+          fg = "{{ colors.text.primary }}",
+        }
+        hl.NeoTreeFileNameOpened = {
+          fg = "{{ colors.text.primary }}",
+          bold = true,
+        }
+        hl.NeoTreeDirectoryName = {
+          fg = "{{ colors.text.primary }}",
+        }
+        hl.NeoTreeDirectoryIcon = {
+          fg = "{{ colors.accent.secondary }}",
+        }
+        hl.NeoTreeFileIcon = {
+          fg = "{{ colors.text.secondary }}",
+        }
+        hl.NeoTreeDimText = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.NeoTreeFadeText1 = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.NeoTreeFadeText2 = {
+          fg = "{{ colors.text.disabled }}",
+        }
+        hl.NeoTreeDotfile = {
+          fg = "{{ colors.text.secondary }}",
+        }
+        hl.NeoTreeIgnored = {
+          fg = "{{ colors.text.disabled }}",
+        }
+        hl.NeoTreeIndentMarker = {
+          fg = "{{ colors.border.subtle }}",
+        }
+        hl.NeoTreeExpander = {
+          fg = "{{ colors.text.muted }}",
+        }
+        hl.NeoTreeCursorLine = {
+          bg = "{{ colors.surface.hover }}",
+          bold = true,
+        }
+        hl.NeoTreeSelected = {
+          bg = "{{ colors.selection.background }}",
+          fg = "{{ colors.text.primary }}",
+        }
+        hl.NeoTreeModified = {
+          fg = "{{ colors.status.warning }}",
+        }
+        hl.NeoTreeGitAdded = {
+          fg = "{{ colors.status.success }}",
+        }
+        hl.NeoTreeGitModified = {
+          fg = "{{ colors.status.warning }}",
+        }
+        hl.NeoTreeGitDeleted = {
+          fg = "{{ colors.status.critical }}",
+        }
+        hl.NeoTreeGitConflict = {
+          fg = "{{ colors.status.critical }}",
+          italic = true,
+          bold = true,
+        }
+        hl.NeoTreeGitUntracked = {
+          fg = "{{ colors.accent.secondary }}",
+        }
+        hl.NeoTreeGitIgnored = {
+          fg = "{{ colors.text.disabled }}",
+        }
+        hl.NeoTreeGitRenamed = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.NeoTreeGitStaged = {
+          fg = "{{ colors.status.success }}",
+        }
+        hl.NeoTreeGitUnstaged = {
+          fg = "{{ colors.status.warning }}",
+        }
+        hl.NeoTreeMessage = {
+          fg = "{{ colors.text.muted }}",
+          italic = true,
+        }
+        hl.NeoTreeRootName = {
+          fg = "{{ colors.text.primary }}",
+          bold = true,
+        }
+        hl.NeoTreeSymbolicLinkTarget = {
+          fg = "{{ colors.accent.sky }}",
+        }
+        hl.NeoTreeFloatNormal = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.NeoTreeFloatBorder = {
+          fg = "{{ colors.border.subtle }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.NeoTreeFloatTitle = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+          bold = true,
+        }
+        hl.NeoTreeTabActive = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+          bold = true,
+        }
+        hl.NeoTreeTabInactive = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeTabSeparatorActive = {
+          fg = "{{ colors.border.subtle }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+        hl.NeoTreeTabSeparatorInactive = {
+          fg = "{{ colors.surface.base }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeVertSplit = {
+          fg = "{{ colors.border.subtle }}",
+        }
+        hl.NeoTreeWinSeparator = {
+          fg = "{{ colors.border.subtle }}",
+        }
+        hl.NeoTreeEndOfBuffer = {
+          fg = "{{ colors.surface.base }}",
+        }
+        hl.NeoTreeTitleBar = {
+          fg = "{{ colors.text.primary }}",
+          bg = "{{ colors.surface.raised }}",
+          bold = true,
+        }
+        hl.NeoTreePreview = {
+          bg = "{{ colors.selection.background }}",
+        }
+
+        -- ===== Misc. native/LSP UI =====
+        hl.LspReferenceText = { bg = "{{ colors.surface.hover }}" }
+        hl.LspReferenceRead = { bg = "{{ colors.surface.hover }}" }
+        hl.LspReferenceWrite = { bg = "{{ colors.surface.hover }}" }
+        hl.LspSignatureActiveParameter = {
+          bg = "{{ colors.selection.background }}",
+          bold = true,
+        }
+        hl.LspCodeLens = { fg = "{{ colors.text.muted }}" }
+        hl.LspInlayHint = {
+          fg = "{{ colors.text.muted }}",
+          bg = "{{ colors.surface.overlay }}",
+        }
+        hl.LspInfoBorder = {
+          fg = "{{ colors.border.focus }}",
+          bg = "{{ colors.surface.raised }}",
+        }
+
+        -- Links/focus that often expose forgotten source colors.
+        hl.Directory = { fg = "{{ colors.accent.sky }}" }
+        hl.Folded = {
+          fg = "{{ colors.accent.sky_soft }}",
+          bg = "{{ colors.surface.overlay }}",
+        }
+        hl.Conceal = { fg = "{{ colors.text.muted }}" }
+        hl.FoldColumn = {
+          fg = "{{ colors.text.muted }}",
+          bg = "NONE",
+        }
+        hl.helpCommand = {
+          fg = "{{ colors.accent.sky }}",
+          bg = "{{ colors.surface.base }}",
+        }
+        hl.qfFileName = { fg = "{{ colors.accent.sky }}" }
       end,
     },
   },

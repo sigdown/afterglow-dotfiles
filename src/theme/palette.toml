@@ -1,68 +1,78 @@
-[colors.surface]
-base = "#07111F"
-raised = "#101A28"
-overlay = "#182230"
-hover = "#202C3A"
-alert = "#31262E"
+  [colors.surface]
+base = "#0b0f1e"
+raised = "#0e1826"
+overlay = "#14202d"
+hover = "#1d2735"
+popup = "#101b29"
+alert = "#39262f"
 
 [colors.text]
-primary = "#EBC99A"
-secondary = "#C8A982"
-muted = "#8F9187"
-on_accent = "#07111F"
+primary = "#f0d8ad"
+secondary = "#b99f84"
+muted = "#717b84"
+disabled = "#574d54"
+on_accent = "#0b0f1e"
 
 [colors.border]
-subtle = "#2B3441"
-strong = "#83553C"
-focus = "#C8A982"
-critical = "#C65E49"
+subtle = "#2f3a56"
+strong = "#6f2512"
+focus = "#e8a47a"
+critical = "#aa3c0e"
 
 [colors.accent]
-primary = "#C5662A"
-secondary = "#3B8F83"
+primary = "#e07a2f"
+secondary = "#1b987d"
+sky = "#70b7d6"
+sky_soft = "#527f95"
+sky_bright = "#98c9dd"
 
 [colors.status]
-success = "#5FAF8F"
-info = "#5C9FB3"
-warning = "#D49A57"
-critical = "#C65E49"
+success = "#1b987d"
+info = "#5a93a5"
+warning = "#e0a05f"
+critical = "#aa3c0e"
 
 [colors.selection]
-background = "#21404A"
-foreground = "#EBC99A"
+background = "#282b48"
+foreground = "#f0d8ad"
 
 [colors.cursor]
-cursor = "#C8A982"
-text = "#07111F"
+cursor = "#e8a47a"
+text = "#0b0f1e"
 
 [colors.syntax]
+comment = "#717b84"
+keyword = "#e07a2f"
+keyword_function = "#70b7d6"
 
-comment = "#617080"
+function = "#f0d8ad"
+method = "#b99f84"
 
-keyword = "#E08A5B"
+type = "#35a893"
+builtin = "#35a893"
+constructor = "#5da99a"
+boolean = "#35a893"
 
-function = "#7CC7D9"
+string = "#d99a78"
+string_escape = "#f2d09e"
 
-type = "#55B8B0"
+constant = "#e0a06e"
+number = "#e0a06e"
 
-builtin = "#8BB8E8"
+variable = "#f0d8ad"
+parameter = "#b99f84"
 
-string = "#A7CFA0"
+property = "#f0d8ad"
+field = "#f0d8ad"
 
-constant = "#E6B566"
+operator = "#e07a2f"
+punctuation = "#717b84"
 
-number = "#E6B566"
+tag = "#35a893"
+attribute = "#aa3c0e"
 
-variable = "#D8D3C0"
+namespace = "#92705d"
+enum = "#e07a2f"
 
-parameter = "#B9B6A0"
-
-property = "#C7DCE0"
-
-operator = "#AFAF9C"
-
-punctuation = "#697887"
-
-tag = "#55B8B0"
-
-attribute = "#E08A5B"
+macro = "#aa3c0e"
+regex = "#d99a78"
