@@ -28,15 +28,16 @@ tooltip {
 }
 
 #workspaces button {
-    min-width: 28px;
+    min-width: 32px;
     min-height: 32px;
     padding: 0;
+    margin: 0;
     color: @text-muted;
     background: transparent;
 }
 
 #workspaces button label {
-    min-width: 28px;
+    min-width: 32px;
     min-height: 32px;
     padding: 0;
     margin: 0;
@@ -68,6 +69,7 @@ tooltip {
 #memory,
 #pulseaudio,
 #network,
+#battery,
 #tray {
     margin: 0;
     padding: 0 8px;
@@ -78,6 +80,7 @@ tooltip {
 #memory,
 #pulseaudio,
 #network,
+#battery,
 #tray {
     border-left: 1px solid @border-subtle;
 }
@@ -112,4 +115,16 @@ tooltip {
     padding-left: 10px;
     padding-right: 8px;
     margin-right: 8px;
+}
+
+#battery.warning {
+    color: @status-warning;
+}
+
+#battery.critical {
+    color: @status-critical;
+}
+
+#battery.charging {
+    color: @accent-secondary;
 }

@@ -1,78 +1,84 @@
-  [colors.surface]
-base = "#0b0f1e"
-raised = "#0e1826"
-overlay = "#14202d"
-hover = "#1d2735"
-popup = "#101b29"
-alert = "#39262f"
+[colors.surface]
+# Эффект глубокой тонировки: плотный темно-синий с едва уловимым циановым стеклянным подтоном
+base = "#0A121D" 
+raised = "#121C29"
+overlay = "#192535"
+hover = "#212F42"
+popup = "#121C29"
+alert = "#452226"
 
 [colors.text]
-primary = "#f0d8ad"
-secondary = "#b99f84"
-muted = "#717b84"
-disabled = "#574d54"
-on_accent = "#0b0f1e"
+# Настоящий песочный оттенок с ткани кресла, теплый и без зеленцы
+primary = "#DEBFA0" 
+secondary = "#B39575"
+muted = "#657991"
+disabled = "#455568"
+on_accent = "#0d1322"
 
 [colors.border]
-subtle = "#2f3a56"
-strong = "#6f2512"
-focus = "#e8a47a"
-critical = "#aa3c0e"
+subtle = "#253454"
+strong = "#b55431"
+focus = "#d27d46"
+critical = "#c44221"
 
 [colors.accent]
-primary = "#e07a2f"
-secondary = "#1b987d"
-sky = "#70b7d6"
-sky_soft = "#527f95"
-sky_bright = "#98c9dd"
+# Оттенки дерева и бирюзового океана
+primary = "#C26D3B"     
+secondary = "#2B8F81"   
+sky = "#3CA092"
+sky_soft = "#317D73"
+sky_bright = "#52BDB0"
 
 [colors.status]
-success = "#1b987d"
-info = "#5a93a5"
-warning = "#e0a05f"
-critical = "#aa3c0e"
+success = "#2B8F81"
+info = "#3CA092"
+warning = "#D28E46"
+critical = "#c44221"
 
 [colors.selection]
-background = "#282b48"
-foreground = "#f0d8ad"
+background = "#243754"
+foreground = "#DEBFA0"
 
 [colors.cursor]
-cursor = "#e8a47a"
-text = "#0b0f1e"
+cursor = "#D27D46"
+text = "#0d1322"
 
 [colors.syntax]
-comment = "#717b84"
-keyword = "#e07a2f"
-keyword_function = "#70b7d6"
+# Семантика: жесткое разделение без микроотличий
+comment = "#6A7C92"       # Блик на стекле (приглушенный сине-серый)
+keyword = "#C76843"       # Теплое дерево (яркий рыже-коричневый)
 
-function = "#f0d8ad"
-method = "#b99f84"
+# Классы, типы и конструкторы (Environment, FileSystemLoader)
+# ОДИН И ТОТ ЖЕ цвет, чтобы вызов класса не отличался от его импорта
+type = "#39A394"          # Чистый бирюзовый (океан)
+constructor = "#39A394"   
+builtin = "#39A394"
 
-type = "#35a893"
-builtin = "#35a893"
-constructor = "#5da99a"
-boolean = "#35a893"
+# Функции и методы (например, .render(), .get_template())
+# Четко отличимый золотисто-песочный, чтобы не путать с классами
+function = "#D28F46"
+method = "#D28F46"
+keyword_function = "#C76843" # def, class подсветятся как ключевые слова
 
-string = "#d99a78"
-string_escape = "#f2d09e"
+# Базовые примитивы
+string = "#CE7C65"        # Мягкий терракотовый
+string_escape = "#E5C8A8"
+number = "#DEBFA0"        
+boolean = "#D28F46"
+constant = "#D28F46"
 
-constant = "#e0a06e"
-number = "#e0a06e"
+# Переменные и поля
+variable = "#DEBFA0"      # Базовый текст (песочный)
+parameter = "#B89A7B"     # Чуть темнее песочного, чтобы отделить аргументы
+property = "#8EA0B3"      # Холодный серый, чтобы свойства объектов не сливались с переменными
+field = "#8EA0B3"
 
-variable = "#f0d8ad"
-parameter = "#b99f84"
-
-property = "#f0d8ad"
-field = "#f0d8ad"
-
-operator = "#e07a2f"
-punctuation = "#717b84"
-
-tag = "#35a893"
-attribute = "#aa3c0e"
-
-namespace = "#92705d"
-enum = "#e07a2f"
-
-macro = "#aa3c0e"
-regex = "#d99a78"
+# Операторы и пунктуация
+operator = "#C76843"
+punctuation = "#6A7C92"
+tag = "#39A394"
+attribute = "#CE7C65"
+namespace = "#8EA0B3"     # Модули (например, os, sys)
+enum = "#39A394"
+macro = "#C76843"
+regex = "#CE7C65"
