@@ -65,8 +65,6 @@ tooltip {
 }
 
 #language,
-#cpu,
-#memory,
 #pulseaudio,
 #network,
 #battery,
@@ -76,8 +74,6 @@ tooltip {
     color: @text-secondary;
 }
 
-#cpu,
-#memory,
 #pulseaudio,
 #network,
 #battery,
@@ -89,15 +85,6 @@ tooltip {
     color: @text-muted;
 }
 
-#cpu.warning,
-#memory.warning {
-    color: @status-warning;
-}
-
-#cpu.critical,
-#memory.critical {
-    color: @status-critical;
-}
 
 #pulseaudio.muted {
     color: @text-muted;

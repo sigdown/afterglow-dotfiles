@@ -20,7 +20,6 @@ focus = "#d27d46"
 critical = "#c44221"
 
 [colors.accent]
-# Оттенки дерева и бирюзового океана
 primary = "#C26D3B"     
 secondary = "#2B8F81"   
 sky = "#3CA092"
@@ -42,33 +41,33 @@ cursor = "#D27D46"
 text = "#0d1322"
 
 [colors.syntax]
-comment = "#6A7C92"       # Блик на стекле (приглушенный сине-серый)
-keyword = "#C76843"       # Теплое дерево (яркий рыже-коричневый)
+comment = "#6A7C92"
+keyword = "#C76843"
 
-type = "#39A394"          # Чистый бирюзовый (океан)
+type = "#39A394"
 constructor = "#39A394"   
 builtin = "#39A394"
 
 function = "#D28F46"
 method = "#D28F46"
-keyword_function = "#C76843" # def, class подсветятся как ключевые слова
+keyword_function = "#C76843"
 
-string = "#CE7C65"        # Мягкий терракотовый
+string = "#CE7C65"
 string_escape = "#E5C8A8"
 number = "#DEBFA0"        
 boolean = "#D28F46"
 constant = "#D28F46"
 
-variable = "#DEBFA0"      # Базовый текст (песочный)
-parameter = "#B89A7B"     # Чуть темнее песочного, чтобы отделить аргументы
-property = "#8EA0B3"      # Холодный серый, чтобы свойства объектов не сливались с переменными
+variable = "#DEBFA0"
+parameter = "#B89A7B"
+property = "#8EA0B3"
 field = "#8EA0B3"
 
 operator = "#C76843"
 punctuation = "#6A7C92"
 tag = "#39A394"
 attribute = "#CE7C65"
-namespace = "#8EA0B3"     # Модули (например, os, sys)
+namespace = "#8EA0B3"
 enum = "#39A394"
 macro = "#C76843"
 regex = "#CE7C65"
