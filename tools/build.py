@@ -28,17 +28,12 @@ def create_environment() -> Environment:
         lstrip_blocks=True,
     )
     env.filters["hex_alpha"] = hex_alpha
-    env.filters["with_alpha"] = with_alpha
     env.filters["hypr_rgba"] = hypr_rgba
     return env
 
 
 def hex_alpha(value: str, alpha: str = "FF") -> str:
     return f"{value.removeprefix('#')}{alpha}"
-
-
-def with_alpha(value: str, alpha: str = "FF") -> str:
-    return f"{value}{alpha}"
 
 
 def hypr_rgba(value: str) -> str:
