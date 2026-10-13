@@ -1,44 +1,45 @@
 font_family JetBrainsMono Nerd Font
 font_size 12.5
 
+modify_font cell_height 110%
+
 window_padding_width 10
 placement_strategy center
+
+background_opacity 1.0
 
 background {{ colors.surface.base }}
 foreground {{ colors.text.primary }}
 
-selection_background {{ colors.surface.hover }}
-selection_foreground {{ colors.text.primary }}
+selection_background {{ colors.selection.background }}
+selection_foreground {{ colors.selection.foreground }}
 
 cursor {{ colors.cursor.cursor }}
-cursor_text_color {{ colors.cursor.cursor }}
+cursor_text_color {{ colors.cursor.text }}
 
-url_color {{ colors.accent.secondary }}
+url_color {{ colors.accent.sky }}
 
-active_border_color {{ colors.accent.primary }}
-inactive_border_color {{ colors.accent.primary }}
+active_border_color {{ colors.border.focus }}
+inactive_border_color {{ colors.border.subtle }}
 bell_border_color {{ colors.status.critical }}
 
-color0  #182230
-color1  #C65E49
-color2  #4F9180
-color3  #D49A57
-color4  #557A9A
-color5  #9A6678
-color6  #2F8F80
-color7  #C8A982
+color0 {{ colors.terminal.normal.black }}
+color1 {{ colors.terminal.normal.red }}
+color2 {{ colors.terminal.normal.green }}
+color3 {{ colors.terminal.normal.yellow }}
+color4 {{ colors.terminal.normal.blue }}
+color5 {{ colors.terminal.normal.magenta }}
+color6 {{ colors.terminal.normal.cyan }}
+color7 {{ colors.terminal.normal.white }}
 
-color8  #58616A
-color9  #DE735C
-color10 #70AA98
-color11 #E8B66F
-color12 #7195B3
-color13 #B98596
-color14 #63B3A3
-color15 #EBC99A
+color8  {{ colors.terminal.bright.black }}
+color9  {{ colors.terminal.bright.red }}
+color10 {{ colors.terminal.bright.green }}
+color11 {{ colors.terminal.bright.yellow }}
+color12 {{ colors.terminal.bright.blue }}
+color13 {{ colors.terminal.bright.magenta }}
+color14 {{ colors.terminal.bright.cyan }}
+color15 {{ colors.terminal.bright.white }}
 
 enable_audio_bell no
 confirm_os_window_close 0
-modify_font cell_height 110%
-
-background_opacity 1.0

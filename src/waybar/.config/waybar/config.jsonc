@@ -1,8 +1,13 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 36,
-    "spacing": 4,
+
+    "height": 34,
+    "spacing": 0,
+
+    "fixed-center": true,
+    "exclusive": true,
+    "reload_style_on_change": true,
 
     "modules-left": [
         "hyprland/workspaces"
@@ -13,10 +18,12 @@
     ],
 
     "modules-right": [
+        "privacy",
         "hyprland/language",
+        "backlight",
         "pulseaudio",
-        "battery",
         "network",
+        "battery",
         "tray"
     ],
 
@@ -29,64 +36,100 @@
     },
 
     "clock": {
-        "format": " {:%H:%M}",
-        "format-alt": " {:%d.%m.%Y %H:%M}",
+        "format": "{:%H:%M}",
+        "format-alt": "{:%a, %d %b  %H:%M}",
         "tooltip": true,
-        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>"
+        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt><small>{calendar}</small></tt>"
     },
 
     "hyprland/language": {
-        "format": "  {}",
+        "format": "{}",
         "format-en": "EN",
         "format-ru": "RU",
+        "tooltip": false,
+        "on-click": "hyprctl switchxkblayout all next"
+    },
+
+    "privacy": {
+        "icon-spacing": 6,
+        "icon-size": 16,
+        "transition-duration": 200,
+        "ignore-monitor": true,
+
+        "modules": [
+            {
+                "type": "screenshare",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            },
+            {
+                "type": "audio-in",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            }
+        ]
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+
+        "scroll-step": 5,
+        "min-brightness": 5,
         "tooltip": false
     },
 
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰖁 MUTE",
-        "format-icons": {
-            "default": [
-                "",
-                " ",
-                " "
-            ]
-        },
-        "scroll-step": 2,
-        "tooltip": true,
-        "tooltip-format": "Volume: {volume}%"
-    },
-    
-    "battery": {
-    "interval": 30,
-    "states": {
-        "warning": 30,
-        "critical": 15
-    },
-    "format": "{icon} {capacity}%",
-    "format-charging": "󰂄 {capacity}%",
-    "format-plugged": "󰚥 {capacity}%",
-    "format-alt": "{time} {icon}",
-    "format-icons": [
-        "󰁺",
-        "󰁻",
-        "󰁼",
-        "󰁽",
-        "󰁾",
-        "󰁿",
-        "󰂀",
-        "󰂁",
-        "󰂂",
-        "󰁹"
-    ],
-    "tooltip": true,
-    "tooltip-format": "{capacity}% • {time}"
-},
+    "format": "{icon} {volume}%",
+    "format-bluetooth": " {icon} {volume}%",
 
+    "format-muted": "󰝟 MUTE",
+    "format-bluetooth-muted": " 󰝟 MUTE",
+
+    "format-icons": {
+        "headphone": "󰋋",
+        "headset": "󰋎",
+        "hands-free": "󰋎",
+        "speaker": [
+            "󰕿",
+            "󰖀",
+            "󰕾"
+        ],
+        "default": [
+            "󰕿",
+            "󰖀",
+            "󰕾"
+        ]
+    },
+
+    "scroll-step": 2,
+    "max-volume": 100,
+
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+
+    "tooltip": true,
+    "tooltip-format": "{desc}\nVolume: {volume}%"
+},
     "network": {
+        "interval": 10,
+
         "format-wifi": "{icon} {signalStrength}%",
         "format-ethernet": "󰈀 LAN",
+        "format-linked": "󰈀 LINK",
         "format-disconnected": "󰤭 OFF",
+        "format-disabled": "󰤭 OFF",
+
         "format-icons": {
             "wifi": [
                 "󰤯",
@@ -96,13 +139,48 @@
                 "󰤨"
             ]
         },
+
         "tooltip": true,
-        "tooltip-format": "{ifname} • {ipaddr}",
-        "tooltip-format-disconnected": "Network disconnected"
+        "tooltip-format-wifi": "{essid}\nSignal: {signalStrength}% • {frequency} GHz\n{ipaddr}",
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+        "tooltip-format-linked": "{ifname} • no IP",
+        "tooltip-format-disconnected": "Network disconnected",
+        "tooltip-format-disabled": "Wi-Fi disabled"
     },
 
     "tray": {
-        "icon-size": 17,
-        "spacing": 8
+        "icon-size": 16,
+        "spacing": 6
+    },
+
+    "battery": {
+        "interval": 30,
+
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-full": "󰁹 {capacity}%",
+        "format-alt": "{icon} {time}",
+
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ],
+
+        "tooltip": true,
+        "tooltip-format": "{capacity}% • {timeTo}\n{power:.1f} W • health {health}%"
     }
 }

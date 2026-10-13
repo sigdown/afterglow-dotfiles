@@ -75,3 +75,23 @@ operator = "#97A7B8"
 punctuation = "#6B7C92"
 
 macro = "#D96C55"
+
+[colors.terminal.normal]
+black = "#111B28"
+red = "#D85D4F"
+green = "#79AC73"
+yellow = "#E3AA45"
+blue = "#658FB8"
+magenta = "#B898CC"
+cyan = "#2FA79A"
+white = "#A98263"
+
+[colors.terminal.bright]
+black = "#6B7C92"
+red = "#E87964"
+green = "#9BC08E"
+yellow = "#F0C46B"
+blue = "#97C6EE"
+magenta = "#D181A5"
+cyan = "#62C5B7"
+white = "#EDD3B5"
