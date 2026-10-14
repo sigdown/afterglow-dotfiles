@@ -4,17 +4,16 @@ set -euo pipefail
 
 choice="$(
     printf '%s\n' \
+        "× Close" \
         "Lock" \
         "Suspend" \
         "Logout" \
         "Reboot" \
-        "Power off" \
-        "Close" |
-        fuzzel --dmenu --only-match \
+        "Power off" |
+        fuzzel --dmenu --only-match --no-sort \
             --prompt "Session › " \
             --placeholder "Select…" \
-            --lines 6 \
-            --vertical-pad 12 --inner-pad 4
+            --lines 6
 )" || exit 0
 
 case "$choice" in
@@ -42,7 +41,7 @@ case "$choice" in
             --post-cmd "systemctl poweroff"
         ;;
 
-    "Close")
+    "× Close")
         exit 0
         ;;
 esac

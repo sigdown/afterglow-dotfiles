@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 
 
 def pactl(*args):
@@ -38,18 +39,21 @@ def label(text):
 
 
 def pick(prompt, entries):
-    result = subprocess.run(
-        [
-            "fuzzel", "--dmenu", "--index", "--only-match",
-            "--log-level=error", "--prompt", f"{prompt} › ",
-            "--lines", str(min(len(entries), 10)),
-            "--placeholder", "Select…",
-        ],
-        input="\n".join(label(entry) for entry in entries) + "\n",
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
+    args = [
+        "fuzzel", "--dmenu", "--index", "--only-match", "--no-sort",
+        "--log-level=error", "--prompt", f"{prompt} › ",
+        "--lines", str(min(len(entries), 10)),
+        "--placeholder", "Select…",
+    ]
+    content = "\n".join(label(entry) for entry in entries) + "\n"
+    deadline = time.monotonic() + 2
+    while True:
+        result = subprocess.run(args, input=content, capture_output=True, text=True, encoding="utf-8")
+        if not result.returncode or "failed to acquire lock" not in result.stderr:
+            break
+        if time.monotonic() >= deadline:
+            raise RuntimeError("Fuzzel is busy. Close the other menu and try again.")
+        time.sleep(0.05)
     if result.returncode in (1, 2) and not result.stderr.strip():
         raise SystemExit(0)
     if result.returncode:
@@ -61,6 +65,15 @@ def pick(prompt, entries):
     if not 0 <= index < len(entries):
         raise SystemExit(0)
     return index
+
+
+def submenu(prompt, entries):
+    index = pick(prompt, ["× Close", "← Back", *entries])
+    if index == 0:
+        raise SystemExit(0)
+    if index == 1:
+        return None
+    return index - 2
 
 
 def volume(device):
@@ -96,8 +109,8 @@ def choose_device(kind):
 
     if not choices:
         raise RuntimeError("No devices available")
-    index = pick("Output" if kind == "sink" else "Microphone", [*entries, "← Back"])
-    if index == len(choices):
+    index = submenu("Output" if kind == "sink" else "Microphone", entries)
+    if index is None:
         return False
     name, port = choices[index]
     if port is not None:
@@ -113,11 +126,11 @@ def choose_volume(kind):
         if device is None:
             raise RuntimeError("No device available for volume control")
         current = volume(device)
-        index = pick(
+        index = submenu(
             f"{'Volume' if kind == 'sink' else 'Microphone level'}: {summary(device)}",
-            ["+5%", "−5%", *(f"{value}%" for value in presets), "← Back"],
+            ["+5%", "−5%", *(f"{value}%" for value in presets)],
         )
-        if index == len(presets) + 2:
+        if index is None:
             return
         if index < 2:
             value = min(100, max(0, current + (5 if index == 0 else -5)))
@@ -136,14 +149,17 @@ def main():
         sink = default_device("sink")
         source = default_device("source")
         index = pick("Audio", [
+            "× Close",
             f"󰋋 Output: {sink['description'] if sink else 'no device'}",
             f"󰕾 Volume: {summary(sink)}",
             "󰝟 Unmute output" if sink and sink["mute"] else "󰝟 Mute output",
             f"󰍬 Microphone: {source['description'] if source else 'no device'}",
             f"󰍭 Microphone level: {summary(source)}",
             "󰍭 Unmute microphone" if source and source["mute"] else "󰍭 Mute microphone",
-            "Close",
         ])
+        if index == 0:
+            return
+        index -= 1
         if index in (0, 3):
             if choose_device("sink" if index == 0 else "source"):
                 return

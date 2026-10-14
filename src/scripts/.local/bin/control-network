@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+
+import fcntl
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+
+def instance_lock():
+    runtime = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+    lock = open(os.path.join(runtime, "control-network.lock"), "a")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        lock.close()
+        raise SystemExit(0)
+    return lock
+
+
+def nmcli(*args, password=None, wait=30):
+    result = subprocess.run(
+        ["nmcli", "--colors", "no", "--wait", str(wait), *args],
+        input=password + "\n" if password is not None else None,
+        stdin=subprocess.DEVNULL if password is None else None,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "LC_ALL": "C"},
+        timeout=35,
+    )
+    if result.returncode:
+        message = result.stderr.strip() or "NetworkManager operation failed"
+        if password:
+            message = message.replace(password, "[redacted]")
+        raise RuntimeError(message)
+    return result.stdout.rstrip("\n")
+
+
+def split_fields(line):
+    fields = []
+    value = []
+    escaped = False
+    for character in line:
+        if escaped:
+            value.append(character)
+            escaped = False
+        elif character == "\\":
+            escaped = True
+        elif character == ":":
+            fields.append("".join(value))
+            value = []
+        else:
+            value.append(character)
+    if escaped:
+        value.append("\\")
+    fields.append("".join(value))
+    return fields
+
+
+def rows(fields, *args):
+    output = nmcli("--terse", "--escape", "yes", "--fields", fields, *args)
+    return [split_fields(line) for line in output.splitlines() if line]
+
+
+def label(text):
+    return " ".join(str(text).split())
+
+
+def fuzzel(prompt, entries=None):
+    args = ["fuzzel", "--dmenu", "--log-level=error", "--prompt", f"{label(prompt)} › "]
+    if entries is None:
+        args.extend(["--password", "--lines", "0", "--placeholder", "Password…"])
+        content = ""
+    else:
+        args.extend(["--index", "--only-match", "--no-sort", "--lines", str(min(len(entries), 10)),
+                     "--placeholder", "Select…"])
+        content = "\n".join(label(entry) for entry in entries) + "\n"
+    deadline = time.monotonic() + 2
+    while True:
+        result = subprocess.run(args, input=content, capture_output=True, text=True, encoding="utf-8")
+        if not result.returncode or "failed to acquire lock" not in result.stderr:
+            break
+        if time.monotonic() >= deadline:
+            raise RuntimeError("Fuzzel is busy. Close the other menu and try again.")
+        time.sleep(0.05)
+    if result.returncode in (1, 2) and not result.stderr.strip():
+        raise SystemExit(0)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "Failed to open Fuzzel")
+    if entries is None:
+        password = result.stdout.removesuffix("\n")
+        if not password:
+            raise SystemExit(0)
+        return password
+    try:
+        index = int(result.stdout.strip())
+    except ValueError:
+        raise SystemExit(0)
+    if not 0 <= index < len(entries):
+        raise SystemExit(0)
+    return index
+
+
+def submenu(prompt, entries, actions=()):
+    index = fuzzel(prompt, ["× Close", "← Back", *actions, *entries])
+    if index == 0:
+        raise SystemExit(0)
+    return None if index == 1 else index - 2
+
+
+def notify(message):
+    if shutil.which("notify-send"):
+        subprocess.run(["notify-send", "--app-name=control-network", "--", "Network", message])
+
+
+def devices():
+    return rows("DEVICE,TYPE,STATE,CONNECTION", "device", "status")
+
+
+def connections():
+    return [row for row in rows("UUID,NAME,TYPE,DEVICE", "connection", "show")
+            if row[2] in ("802-11-wireless", "802-3-ethernet")]
+
+
+def request_scan(interface):
+    nmcli("device", "wifi", "rescan", "ifname", interface, wait=0)
+
+
+def access_points(interface):
+    fields = "IN-USE,SSID,SIGNAL,SECURITY,BSSID"
+    points = {}
+    for active, ssid, signal, security, bssid in rows(
+        fields, "device", "wifi", "list", "ifname", interface, "--rescan", "no"
+    ):
+        if not ssid:
+            continue
+        point = (active == "*", ssid, int(signal), security, bssid)
+        key = (ssid, security)
+        previous = points.get(key)
+        if previous is None or (point[0], point[2]) > (previous[0], previous[2]):
+            points[key] = point
+    return sorted(points.values(), key=lambda point: (not point[0], -point[2], point[1].casefold()))
+
+
+def saved_wifi(ssid, interface, security):
+    for uuid, _, kind, _ in connections():
+        if kind != "802-11-wireless":
+            continue
+        fields = "802-11-wireless.ssid,connection.interface-name,802-11-wireless-security.key-mgmt"
+        details = nmcli("--get-values", fields, "--escape", "no", "connection", "show", "uuid", uuid).split("\n")
+        name, bound_interface, key_mgmt = (details + ["", "", ""])[:3]
+        if name != ssid or bound_interface not in ("", "--", interface):
+            continue
+        enterprise = "802.1X" in security
+        if enterprise != (key_mgmt in ("wpa-eap", "ieee8021x", "wpa-eap-suite-b-192")):
+            continue
+        if (security in ("", "--")) != (key_mgmt in ("", "--")):
+            continue
+        return uuid
+    return None
+
+
+def connect_wifi(point, interface):
+    active, ssid, _, security, bssid = point
+    if active:
+        return
+    profile = saved_wifi(ssid, interface, security)
+    if profile:
+        nmcli("connection", "up", "uuid", profile, "ifname", interface, "ap", bssid)
+    elif "802.1X" in security:
+        raise RuntimeError("Enterprise Wi-Fi requires a configured NetworkManager profile")
+    elif security in ("", "--") or security == "OWE":
+        nmcli("device", "wifi", "connect", bssid, "ifname", interface)
+    else:
+        password = fuzzel(ssid)
+        nmcli("--ask", "device", "wifi", "connect", bssid, "ifname", interface, password=password)
+    notify(f"Connected to {label(ssid)}")
+
+
+def wifi_menu():
+    if nmcli("radio", "wifi") != "enabled":
+        raise RuntimeError("Enable Wi-Fi before scanning")
+    adapters = [row for row in devices() if row[1] == "wifi"]
+    if not adapters:
+        raise RuntimeError("No Wi-Fi adapter available")
+    adapter_index = 0
+    if len(adapters) > 1:
+        adapter_index = submenu("Wi-Fi adapter", [row[0] for row in adapters])
+        if adapter_index is None:
+            return False
+    interface = adapters[adapter_index][0]
+    while True:
+        points = access_points(interface)
+        entries = [f"{'●' if active else '○'} {ssid} · {signal}% · {'Open' if security in ('', '--') else security}"
+                   for active, ssid, signal, security, _ in points]
+        index = submenu("Wi-Fi" if points else "No networks found", entries, actions=["󰑐 Rescan"])
+        if index is None:
+            return False
+        if index == 0:
+            request_scan(interface)
+            continue
+        connect_wifi(points[index - 1], interface)
+        return True
+
+
+def saved_menu():
+    profiles = sorted(connections(), key=lambda row: (row[3] in ("", "--"), row[1].casefold()))
+    entries = [f"{'●' if device not in ('', '--') else '○'} {name} · {'Wi-Fi' if kind == '802-11-wireless' else 'Ethernet'}"
+               for _, name, kind, device in profiles]
+    index = submenu("Saved connections" if profiles else "No saved connections", entries)
+    if index is None:
+        return False
+    uuid, name, _, _ = profiles[index]
+    nmcli("connection", "up", "uuid", uuid)
+    notify(f"Connected to {label(name)}")
+    return True
+
+
+def disconnect_menu():
+    connected = [row for row in devices() if row[1] in ("wifi", "ethernet") and row[2] == "connected"]
+    index = submenu("Disconnect" if connected else "No active connections",
+                    [f"{name} · {interface}" for interface, _, _, name in connected])
+    if index is not None:
+        nmcli("device", "disconnect", connected[index][0])
+
+
+def main():
+    for command in ("nmcli", "fuzzel"):
+        if shutil.which(command) is None:
+            raise RuntimeError(f"Command not found: {command}")
+    scan_requested = False
+    while True:
+        enabled = nmcli("radio", "wifi") == "enabled"
+        network_devices = devices()
+        if enabled and not scan_requested:
+            for interface, kind, state, _ in network_devices:
+                if kind == "wifi" and state != "unavailable":
+                    try:
+                        request_scan(interface)
+                    except RuntimeError:
+                        pass
+            scan_requested = True
+        active = [row[3] for row in network_devices if row[1] == "wifi" and row[2] == "connected"]
+        status = ", ".join(active) if active else "not connected" if enabled else "disabled"
+        index = fuzzel("Network", [
+            "× Close",
+            f"󰤨 Wi-Fi: {status}",
+            "󰓩 Saved connections",
+            "󰤭 Disconnect",
+            "󰤭 Disable Wi-Fi" if enabled else "󰤨 Enable Wi-Fi",
+        ])
+        if index == 0:
+            return
+        index -= 1
+        if index == 0:
+            if wifi_menu():
+                return
+        elif index == 1:
+            if saved_menu():
+                return
+        elif index == 2:
+            disconnect_menu()
+        elif index == 3:
+            nmcli("radio", "wifi", "off" if enabled else "on")
+            scan_requested = False
+        else:
+            return
+
+
+if __name__ == "__main__":
+    try:
+        with instance_lock():
+            main()
+    except KeyboardInterrupt:
+        sys.exit(0)
+    except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
+        message = str(error)
+        print(f"control-network: {message}", file=sys.stderr)
+        notify(message)
+        sys.exit(1)

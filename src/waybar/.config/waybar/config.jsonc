@@ -124,6 +124,7 @@
 },
     "network": {
         "interval": 10,
+        "on-click": "$HOME/.local/bin/control-network",
 
         "format-wifi": "{icon} {signalStrength}%",
         "format-ethernet": "󰈀 LAN",
