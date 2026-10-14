@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export XDG_DATA_DIRS="$HOME/.local/share/control-launcher:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+export LC_MESSAGES=C
+
+exec fuzzel "$@"

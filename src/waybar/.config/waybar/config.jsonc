@@ -116,7 +116,8 @@
     "scroll-step": 2,
     "max-volume": 100,
 
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click": "$HOME/.local/bin/control-audio",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
 
     "tooltip": true,
     "tooltip-format": "{desc}\nVolume: {volume}%"

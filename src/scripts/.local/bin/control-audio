@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+
+def pactl(*args):
+    result = subprocess.run(
+        ["pactl", *args],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "LC_ALL": "C"},
+        timeout=5,
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "Audio server unavailable")
+    return result.stdout.strip()
+
+
+def devices(kind):
+    items = json.loads(pactl("--format=json", "list", f"{kind}s"))
+    if kind == "source":
+        items = [item for item in items if not item.get("monitor_source")]
+    return items
+
+
+def default_device(kind):
+    name = pactl(f"get-default-{kind}")
+    return next((item for item in devices(kind) if item["name"] == name), None)
+
+
+def label(text):
+    return " ".join(str(text).split())
+
+
+def pick(prompt, entries):
+    result = subprocess.run(
+        [
+            "fuzzel", "--dmenu", "--index", "--only-match",
+            "--log-level=error", "--prompt", f"{prompt} › ",
+            "--lines", str(min(len(entries), 10)),
+            "--placeholder", "Select…",
+        ],
+        input="\n".join(label(entry) for entry in entries) + "\n",
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    if result.returncode in (1, 2) and not result.stderr.strip():
+        raise SystemExit(0)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "Failed to open Fuzzel")
+    try:
+        index = int(result.stdout.strip())
+    except ValueError:
+        raise SystemExit(0)
+    if not 0 <= index < len(entries):
+        raise SystemExit(0)
+    return index
+
+
+def volume(device):
+    channels = device.get("volume", {}).values()
+    return round(max((channel["value"] for channel in channels), default=0) * 100 / 65536)
+
+
+def summary(device):
+    if device is None:
+        return "no device"
+    state = " · muted" if device["mute"] else ""
+    return f"{volume(device)}%{state}"
+
+
+def choose_device(kind):
+    current = pactl(f"get-default-{kind}")
+    choices = []
+    entries = []
+    for device in devices(kind):
+        ports = device.get("ports", [])
+        available = [port for port in ports if port.get("availability") != "not available"]
+        if ports and not available:
+            continue
+        for port in available or [None]:
+            active = device["name"] == current and (
+                port is None or port["name"] == device.get("active_port")
+            )
+            name = device.get("description") or device["name"]
+            if port is not None:
+                name = f"{port.get('description') or port['name']} · {name}"
+            entries.append(f"{'●' if active else '○'} {name}")
+            choices.append((device["name"], port["name"] if port else None))
+
+    if not choices:
+        raise RuntimeError("No devices available")
+    index = pick("Output" if kind == "sink" else "Microphone", [*entries, "← Back"])
+    if index == len(choices):
+        return False
+    name, port = choices[index]
+    if port is not None:
+        pactl(f"set-{kind}-port", name, port)
+    pactl(f"set-default-{kind}", name)
+    return True
+
+
+def choose_volume(kind):
+    presets = [0, 10, 25, 50, 75, 100]
+    while True:
+        device = default_device(kind)
+        if device is None:
+            raise RuntimeError("No device available for volume control")
+        current = volume(device)
+        index = pick(
+            f"{'Volume' if kind == 'sink' else 'Microphone level'}: {summary(device)}",
+            ["+5%", "−5%", *(f"{value}%" for value in presets), "← Back"],
+        )
+        if index == len(presets) + 2:
+            return
+        if index < 2:
+            value = min(100, max(0, current + (5 if index == 0 else -5)))
+        else:
+            value = presets[index - 2]
+        pactl(f"set-{kind}-volume", device["name"], f"{value}%")
+        if index >= 2:
+            return
+
+
+def main():
+    for command in ("pactl", "fuzzel"):
+        if shutil.which(command) is None:
+            raise RuntimeError(f"Command not found: {command}")
+    while True:
+        sink = default_device("sink")
+        source = default_device("source")
+        index = pick("Audio", [
+            f"󰋋 Output: {sink['description'] if sink else 'no device'}",
+            f"󰕾 Volume: {summary(sink)}",
+            "󰝟 Unmute output" if sink and sink["mute"] else "󰝟 Mute output",
+            f"󰍬 Microphone: {source['description'] if source else 'no device'}",
+            f"󰍭 Microphone level: {summary(source)}",
+            "󰍭 Unmute microphone" if source and source["mute"] else "󰍭 Mute microphone",
+            "Close",
+        ])
+        if index in (0, 3):
+            if choose_device("sink" if index == 0 else "source"):
+                return
+        elif index in (1, 4):
+            choose_volume("sink" if index == 1 else "source")
+        elif index in (2, 5):
+            device = sink if index == 2 else source
+            if device is None:
+                raise RuntimeError("No device available to mute or unmute")
+            pactl(f"set-{'sink' if index == 2 else 'source'}-mute", device["name"], "toggle")
+        else:
+            return
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(0)
+    except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
+        message = str(error)
+        print(f"control-audio: {message}", file=sys.stderr)
+        if shutil.which("notify-send"):
+            subprocess.run(["notify-send", "--app-name=control-audio", "--", "Audio", message])
+        sys.exit(1)

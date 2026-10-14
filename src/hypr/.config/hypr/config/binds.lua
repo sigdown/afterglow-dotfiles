@@ -4,7 +4,7 @@
 
 local terminal    = "kitty"
 local fileManager = "thunar"
-local menu        = "fuzzel"
+local menu        = "$HOME/.local/bin/control-launcher"
 local mainMod     = "SUPER"
 
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))

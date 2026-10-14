@@ -8,8 +8,13 @@ choice="$(
         "Suspend" \
         "Logout" \
         "Reboot" \
-        "Power off" |
-        fuzzel --dmenu
+        "Power off" \
+        "Close" |
+        fuzzel --dmenu --only-match \
+            --prompt "Session › " \
+            --placeholder "Select…" \
+            --lines 6 \
+            --vertical-pad 12 --inner-pad 4
 )" || exit 0
 
 case "$choice" in
@@ -35,5 +40,9 @@ case "$choice" in
         hyprshutdown \
             -t "Shutting down..." \
             --post-cmd "systemctl poweroff"
+        ;;
+
+    "Close")
+        exit 0
         ;;
 esac
