@@ -100,24 +100,12 @@ tooltip label {
     font-weight: 600;
 }
 
-#backlight {
-    color: @text-secondary;
-}
-
-#pulseaudio {
-    color: @text-secondary;
-}
-
 #pulseaudio.muted {
     color: @text-muted;
 }
 
 #pulseaudio.bluetooth {
     color: @accent-sky;
-}
-
-#network {
-    color: @text-secondary;
 }
 
 #network.linked {
@@ -132,6 +120,118 @@ tooltip label {
 #tray {
     padding-left: 8px;
     padding-right: 8px;
+}
+
+window.popup,
+window.popup decoration {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+#tray menu {
+    background: @surface-popup;
+    color: @text-primary;
+
+    border: 1px solid @border-subtle;
+    border-radius: 6px;
+    padding: 4px;
+
+    box-shadow: none;
+}
+
+#tray menu menuitem {
+    background: transparent;
+    color: @text-primary;
+
+    border-radius: 4px;
+    padding: 6px 10px;
+
+    margin: 0;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+#tray menu menuitem box,
+#tray menu menuitem label {
+    margin: 0;
+    padding: 0;
+}
+
+#tray menu menuitem:dir(ltr) > label:not(:last-child),
+#tray menu menuitem:dir(ltr) > box:not(:last-child) {
+    padding-left: 22px;
+}
+
+#tray menu menuitem arrow {
+    min-width: 14px;
+    min-height: 14px;
+    margin: 0 0 0 8px;
+    padding: 0;
+}
+
+#tray menu menuitem label,
+#tray menu menuitem arrow {
+    color: @text-primary;
+}
+
+#tray menu menuitem:hover {
+    background: @surface-hover;
+}
+
+#tray menu menuitem:hover,
+#tray menu menuitem:hover label,
+#tray menu menuitem:hover arrow {
+    color: @accent-primary;
+}
+
+#tray menu menuitem:disabled,
+#tray menu menuitem:disabled label,
+#tray menu menuitem:disabled arrow {
+    color: @text-disabled;
+}
+
+#tray menu menuitem check,
+#tray menu menuitem radio {
+    background: @surface-base;
+    color: @text-secondary;
+
+    border: 1px solid @border-strong;
+    min-width: 14px;
+    min-height: 14px;
+    margin: 0 8px 0 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+#tray menu menuitem check {
+    border-radius: 3px;
+}
+
+#tray menu menuitem radio {
+    border-radius: 50%;
+}
+
+#tray menu menuitem check:checked,
+#tray menu menuitem radio:checked {
+    background: @accent-primary;
+    color: @text-on-accent;
+    border-color: @accent-primary;
+}
+
+#tray menu menuitem:disabled check,
+#tray menu menuitem:disabled radio {
+    background: @surface-base;
+    color: @text-disabled;
+    border-color: @border-subtle;
+}
+
+#tray menu separator {
+    background: @border-subtle;
+    min-height: 1px;
+    margin: 4px 6px;
+    padding: 0;
 }
 
 #battery {
