@@ -86,6 +86,7 @@ tooltip label {
 #backlight,
 #pulseaudio,
 #network,
+#bluetooth,
 #tray,
 #battery {
     margin: 0;
@@ -115,6 +116,16 @@ tooltip label {
 #network.disconnected,
 #network.disabled {
     color: @status-critical;
+}
+
+#bluetooth.connected {
+    color: @accent-sky;
+}
+
+#bluetooth.off,
+#bluetooth.disabled,
+#bluetooth.no-controller {
+    color: @text-muted;
 }
 
 #tray {

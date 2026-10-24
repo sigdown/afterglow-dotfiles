@@ -1,0 +1,342 @@
+#!/usr/bin/env python3
+
+import fcntl
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+import gi
+
+gi.require_version("Gio", "2.0")
+from gi.repository import Gio, GLib
+
+
+ADAPTER = "org.bluez.Adapter1"
+DEVICE = "org.bluez.Device1"
+AGENT_PATH = "/control/bluetooth/agent"
+AGENT_XML = """
+<node><interface name="org.bluez.Agent1">
+  <method name="Release"/>
+  <method name="RequestPinCode"><arg type="o" direction="in"/><arg type="s" direction="out"/></method>
+  <method name="DisplayPinCode"><arg type="o" direction="in"/><arg type="s" direction="in"/></method>
+  <method name="RequestPasskey"><arg type="o" direction="in"/><arg type="u" direction="out"/></method>
+  <method name="DisplayPasskey"><arg type="o" direction="in"/><arg type="u" direction="in"/><arg type="q" direction="in"/></method>
+  <method name="RequestConfirmation"><arg type="o" direction="in"/><arg type="u" direction="in"/></method>
+  <method name="RequestAuthorization"><arg type="o" direction="in"/></method>
+  <method name="AuthorizeService"><arg type="o" direction="in"/><arg type="s" direction="in"/></method>
+  <method name="Cancel"/>
+</interface></node>
+"""
+
+
+def instance_lock():
+    runtime = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+    lock = open(os.path.join(runtime, "control-bluetooth.lock"), "a")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        lock.close()
+        raise SystemExit(0)
+    return lock
+
+
+def label(text):
+    return " ".join(str(text).split())
+
+
+def menu(prompt, entries=None, placeholder="Select…"):
+    args = ["fuzzel", "--dmenu", "--log-level=error", "--prompt", f"{label(prompt)} › ",
+            "--placeholder", placeholder]
+    if entries is None:
+        args.extend(["--password", "--lines", "0"])
+        content = ""
+    else:
+        args.extend(["--index", "--only-match", "--no-sort", "--lines", str(min(len(entries), 10))])
+        content = "\n".join(label(entry) for entry in entries) + "\n"
+    deadline = time.monotonic() + 2
+    while True:
+        result = subprocess.run(args, input=content, capture_output=True, text=True, encoding="utf-8")
+        if not result.returncode or "failed to acquire lock" not in result.stderr:
+            break
+        if time.monotonic() >= deadline:
+            raise RuntimeError("Fuzzel is busy. Close the other menu and try again.")
+        time.sleep(0.05)
+    if result.returncode in (1, 2) and not result.stderr.strip():
+        raise SystemExit(0)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "Failed to open Fuzzel")
+    if entries is None:
+        value = result.stdout.removesuffix("\n")
+        if not value:
+            raise SystemExit(0)
+        return value
+    try:
+        index = int(result.stdout.strip())
+    except ValueError:
+        raise SystemExit(0)
+    if not 0 <= index < len(entries):
+        raise SystemExit(0)
+    return index
+
+
+def submenu(prompt, entries, actions=()):
+    index = menu(prompt, ["× Close", "← Back", *actions, *entries])
+    if index == 0:
+        raise SystemExit(0)
+    return None if index == 1 else index - 2
+
+
+def notify(message):
+    if shutil.which("notify-send"):
+        subprocess.run(["notify-send", "--app-name=control-bluetooth", "--", "Bluetooth", message])
+
+
+class Bluetooth:
+    def __init__(self):
+        self.bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        self.adapter = None
+        self.scanning = set()
+        self.pairing = None
+        self.cancelled = False
+        self.agent = None
+        self.agent_registered = False
+
+    def call(self, path, interface, method, parameters=None, timeout=5000):
+        return self.bus.call_sync("org.bluez", path, interface, method, parameters,
+                                  None, Gio.DBusCallFlags.NONE, timeout, None)
+
+    def objects(self):
+        return self.call("/", "org.freedesktop.DBus.ObjectManager", "GetManagedObjects").unpack()[0]
+
+    def properties(self, path, interface):
+        return self.call(path, "org.freedesktop.DBus.Properties", "GetAll",
+                         GLib.Variant("(s)", (interface,))).unpack()[0]
+
+    def set_property(self, path, interface, name, value):
+        self.call(path, "org.freedesktop.DBus.Properties", "Set",
+                  GLib.Variant("(ssv)", (interface, name, GLib.Variant("b", value))))
+
+    def adapters(self):
+        return sorted((path, interfaces[ADAPTER]) for path, interfaces in self.objects().items()
+                      if ADAPTER in interfaces)
+
+    def devices(self, paired_only=False):
+        result = []
+        for path, interfaces in self.objects().items():
+            device = interfaces.get(DEVICE)
+            if device is None or device.get("Adapter") != self.adapter:
+                continue
+            paired = device.get("Paired", False) or device.get("Bonded", False)
+            if paired_only and not (paired or device.get("Connected", False)):
+                continue
+            device = dict(device)
+            battery = interfaces.get("org.bluez.Battery1", {}).get("Percentage")
+            name = device.get("Alias") or device.get("Name") or device.get("Address", path)
+            state = "connected" if device.get("Connected") else "paired" if paired else "new"
+            device["label"] = f"{'●' if device.get('Connected') else '○'} {name} · {state}"
+            if battery is not None:
+                device["label"] += f" · {battery}%"
+            result.append((path, device))
+        return sorted(result, key=lambda item: (not item[1].get("Connected", False), item[1]["label"].casefold()))
+
+    def start_scan(self):
+        if self.adapter not in self.scanning:
+            self.call(self.adapter, ADAPTER, "StartDiscovery")
+            self.scanning.add(self.adapter)
+
+    def stop_scans(self):
+        for adapter in list(self.scanning):
+            try:
+                self.call(adapter, ADAPTER, "StopDiscovery")
+            except GLib.Error:
+                pass
+            self.scanning.discard(adapter)
+
+    def register_agent(self):
+        if self.agent is not None:
+            return
+        interface = Gio.DBusNodeInfo.new_for_xml(AGENT_XML).interfaces[0]
+        self.agent = self.bus.register_object(AGENT_PATH, interface, self.agent_call, None, None)
+        self.call("/org/bluez", "org.bluez.AgentManager1", "RegisterAgent",
+                  GLib.Variant("(os)", (AGENT_PATH, "KeyboardDisplay")))
+        self.agent_registered = True
+
+    def agent_call(self, connection, sender, path, interface, method, parameters, invocation):
+        values = parameters.unpack()
+        try:
+            if method in ("Release", "Cancel"):
+                invocation.return_value(None)
+                return
+            if values[0] != self.pairing:
+                raise RuntimeError("Pairing request does not match the selected device")
+            if method == "RequestPinCode":
+                pin = menu("Bluetooth PIN", placeholder="PIN code…")
+                if not 1 <= len(pin) <= 16:
+                    raise RuntimeError("PIN must contain 1 to 16 characters")
+                invocation.return_value(GLib.Variant("(s)", (pin,)))
+            elif method == "RequestPasskey":
+                code = menu("Bluetooth passkey", placeholder="Passkey…")
+                if not code.isascii() or not code.isdigit() or len(code) > 6:
+                    raise RuntimeError("Passkey must contain up to six digits")
+                invocation.return_value(GLib.Variant("(u)", (int(code),)))
+            elif method in ("DisplayPinCode", "DisplayPasskey"):
+                code = values[1] if method == "DisplayPinCode" else f"{values[1]:06d}"
+                notify(f"Enter {code} on the Bluetooth device, then press Enter")
+                invocation.return_value(None)
+            elif method in ("RequestConfirmation", "RequestAuthorization", "AuthorizeService"):
+                prompt = f"Confirm code {values[1]:06d}" if method == "RequestConfirmation" else "Allow pairing"
+                index = menu(prompt, ["× Close", "Reject", "✓ Confirm"])
+                if index != 2:
+                    self.cancelled = True
+                    invocation.return_dbus_error("org.bluez.Error.Rejected", "Pairing rejected")
+                else:
+                    invocation.return_value(None)
+        except SystemExit:
+            self.cancelled = True
+            invocation.return_dbus_error("org.bluez.Error.Canceled", "Pairing canceled")
+        except (RuntimeError, GLib.Error, OSError) as error:
+            invocation.return_dbus_error("org.bluez.Error.Rejected", str(error))
+
+    def pair(self, path):
+        self.register_agent()
+        self.pairing = path
+        self.cancelled = False
+        errors = []
+        loop = GLib.MainLoop()
+
+        def finished(connection, result, user_data):
+            try:
+                connection.call_finish(result)
+            except GLib.Error as error:
+                errors.append(error)
+            loop.quit()
+
+        self.bus.call("org.bluez", path, DEVICE, "Pair", None, None,
+                      Gio.DBusCallFlags.NONE, 60000, None, finished, None)
+        try:
+            loop.run()
+        except BaseException:
+            self.cancelled = True
+            raise
+        finally:
+            self.pairing = None
+            if self.cancelled or errors:
+                try:
+                    self.call(path, DEVICE, "CancelPairing")
+                except GLib.Error:
+                    pass
+        if self.cancelled:
+            raise SystemExit(0)
+        if errors:
+            raise errors[0]
+        self.set_property(path, DEVICE, "Trusted", True)
+
+    def device_menu(self, path):
+        device = self.properties(path, DEVICE)
+        name = device.get("Alias") or device.get("Name") or device.get("Address", path)
+        connected = device.get("Connected", False)
+        paired = device.get("Paired", False) or device.get("Bonded", False)
+        action = "󰂲 Disconnect" if connected else " Connect" if paired else " Pair and connect"
+        index = submenu(name, [action])
+        if index is None:
+            return False
+        self.stop_scans()
+        if connected:
+            self.call(path, DEVICE, "Disconnect", timeout=30000)
+            notify(f"Disconnected from {label(name)}")
+        else:
+            if not paired:
+                self.pair(path)
+            if not self.properties(path, DEVICE).get("Connected", False):
+                self.call(path, DEVICE, "Connect", timeout=30000)
+            notify(f"Connected to {label(name)}")
+        return True
+
+    def device_list(self, discover=False):
+        if discover:
+            if not self.properties(self.adapter, ADAPTER).get("Powered", False):
+                raise RuntimeError("Enable Bluetooth before scanning")
+            self.start_scan()
+        try:
+            while True:
+                devices = self.devices(paired_only=not discover)
+                prompt = "Find devices" if discover else "Devices" if devices else "No paired devices"
+                index = submenu(prompt, [device["label"] for _, device in devices], actions=["󰑐 Refresh"])
+                if index is None:
+                    return False
+                if index == 0:
+                    continue
+                if self.device_menu(devices[index - 1][0]):
+                    return True
+                if discover:
+                    self.start_scan()
+        finally:
+            if discover:
+                self.stop_scans()
+
+    def choose_adapter(self):
+        adapters = self.adapters()
+        index = submenu("Adapter", [f"{'●' if path == self.adapter else '○'} {props.get('Alias', props['Address'])} · {props['Address']}"
+                                    for path, props in adapters])
+        if index is not None:
+            self.stop_scans()
+            self.adapter = adapters[index][0]
+
+    def run(self):
+        adapters = self.adapters()
+        if not adapters:
+            raise RuntimeError("No Bluetooth adapter available")
+        self.adapter = next((path for path, props in adapters if props.get("Powered")), adapters[0][0])
+        while True:
+            props = self.properties(self.adapter, ADAPTER)
+            powered = props.get("Powered", False)
+            connected = sum(bool(device.get("Connected")) for _, device in self.devices())
+            index = menu("Bluetooth", [
+                "× Close",
+                f" Devices: {connected} connected",
+                "󰑐 Find devices",
+                "󰂲 Disable Bluetooth" if powered else " Enable Bluetooth",
+                f"󰒓 Adapter: {props.get('Alias') or props['Address']}",
+            ])
+            if index == 0:
+                return
+            if index in (1, 2):
+                if self.device_list(discover=index == 2):
+                    return
+            elif index == 3:
+                self.stop_scans()
+                self.set_property(self.adapter, ADAPTER, "Powered", not powered)
+            elif index == 4:
+                self.choose_adapter()
+
+    def close(self):
+        self.stop_scans()
+        if self.agent_registered:
+            try:
+                self.call("/org/bluez", "org.bluez.AgentManager1", "UnregisterAgent",
+                          GLib.Variant("(o)", (AGENT_PATH,)))
+            except GLib.Error:
+                pass
+        if self.agent is not None:
+            self.bus.unregister_object(self.agent)
+
+
+if __name__ == "__main__":
+    try:
+        if shutil.which("fuzzel") is None:
+            raise RuntimeError("Command not found: fuzzel")
+        with instance_lock():
+            bluetooth = Bluetooth()
+            try:
+                bluetooth.run()
+            finally:
+                bluetooth.close()
+    except KeyboardInterrupt:
+        sys.exit(0)
+    except (RuntimeError, OSError, GLib.Error) as error:
+        message = str(error)
+        print(f"control-bluetooth: {message}", file=sys.stderr)
+        notify(message)
+        sys.exit(1)

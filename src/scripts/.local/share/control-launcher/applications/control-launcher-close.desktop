@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=× Close
-Exec=/usr/bin/true
-Icon=window-close
-Terminal=false

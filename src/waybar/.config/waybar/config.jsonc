@@ -23,6 +23,7 @@
         "backlight",
         "pulseaudio",
         "network",
+        "bluetooth",
         "battery",
         "tray"
     ],
@@ -148,6 +149,19 @@
         "tooltip-format-linked": "{ifname} • no IP",
         "tooltip-format-disconnected": "Network disconnected",
         "tooltip-format-disabled": "Wi-Fi disabled"
+    },
+
+    "bluetooth": {
+        "format": " ON",
+        "format-disabled": "󰂲 OFF",
+        "format-off": "󰂲 OFF",
+        "format-no-controller": "󰂲 N/A",
+        "format-connected": " {num_connections}",
+        "on-click": "$HOME/.local/bin/control-bluetooth",
+        "tooltip": true,
+        "tooltip-format": "{controller_alias}\nBluetooth: {status}",
+        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}"
     },
 
     "tray": {
