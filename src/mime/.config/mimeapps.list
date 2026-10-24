@@ -1,0 +1,133 @@
+[Default Applications]
+# File manager
+inode/directory=thunar.desktop;
+
+# Images
+image/avif=imv.desktop;
+image/bmp=imv.desktop;
+image/gif=imv.desktop;
+image/heif=imv.desktop;
+image/jpeg=imv.desktop;
+image/jxl=imv.desktop;
+image/png=imv.desktop;
+image/qoi=imv.desktop;
+image/svg+xml=imv.desktop;
+image/tiff=imv.desktop;
+image/webp=imv.desktop;
+
+# Audio
+audio/aac=mpv.desktop;
+audio/ac3=mpv.desktop;
+audio/aiff=mpv.desktop;
+audio/eac3=mpv.desktop;
+audio/flac=mpv.desktop;
+audio/mp4=mpv.desktop;
+audio/mpeg=mpv.desktop;
+audio/ogg=mpv.desktop;
+audio/opus=mpv.desktop;
+audio/vnd.wave=mpv.desktop;
+audio/wav=mpv.desktop;
+audio/webm=mpv.desktop;
+audio/x-m4a=mpv.desktop;
+audio/x-matroska=mpv.desktop;
+audio/x-ms-wma=mpv.desktop;
+audio/x-wav=mpv.desktop;
+
+# Video and Ogg containers
+application/ogg=mpv.desktop;
+video/3gpp=mpv.desktop;
+video/3gpp2=mpv.desktop;
+video/mp2t=mpv.desktop;
+video/mp4=mpv.desktop;
+video/mpeg=mpv.desktop;
+video/ogg=mpv.desktop;
+video/quicktime=mpv.desktop;
+video/vnd.avi=mpv.desktop;
+video/webm=mpv.desktop;
+video/x-flv=mpv.desktop;
+video/x-m4v=mpv.desktop;
+video/x-matroska=mpv.desktop;
+video/x-msvideo=mpv.desktop;
+video/x-ms-wmv=mpv.desktop;
+
+# Text, source code and configuration files
+text/plain=nvim-kitty.desktop;
+text/markdown=nvim-kitty.desktop;
+text/x-python=nvim-kitty.desktop;
+text/x-shellscript=nvim-kitty.desktop;
+application/x-shellscript=nvim-kitty.desktop;
+text/x-c=nvim-kitty.desktop;
+text/x-chdr=nvim-kitty.desktop;
+text/x-csrc=nvim-kitty.desktop;
+text/x-c++=nvim-kitty.desktop;
+text/x-c++hdr=nvim-kitty.desktop;
+text/x-c++src=nvim-kitty.desktop;
+text/x-java=nvim-kitty.desktop;
+text/x-rust=nvim-kitty.desktop;
+text/x-go=nvim-kitty.desktop;
+text/x-lua=nvim-kitty.desktop;
+text/x-makefile=nvim-kitty.desktop;
+text/x-tex=nvim-kitty.desktop;
+text/css=nvim-kitty.desktop;
+text/javascript=nvim-kitty.desktop;
+application/javascript=nvim-kitty.desktop;
+application/json=nvim-kitty.desktop;
+application/toml=nvim-kitty.desktop;
+application/yaml=nvim-kitty.desktop;
+application/x-yaml=nvim-kitty.desktop;
+text/yaml=nvim-kitty.desktop;
+application/xml=nvim-kitty.desktop;
+text/xml=nvim-kitty.desktop;
+
+# Documents
+application/vnd.openxmlformats-officedocument.wordprocessingml.document=libreoffice-writer.desktop;
+application/pdf=org.gnome.Papers.desktop;
+application/x-bzpdf=org.gnome.Papers.desktop;
+application/x-gzpdf=org.gnome.Papers.desktop;
+application/x-xzpdf=org.gnome.Papers.desktop;
+image/vnd.djvu=org.gnome.Papers.desktop;
+image/vnd.djvu+multipage=org.gnome.Papers.desktop;
+
+# Xournal++ notebooks and templates
+application/x-xoj=com.github.xournalpp.xournalpp.desktop;
+application/x-xojpp=com.github.xournalpp.xournalpp.desktop;
+application/x-xopp=com.github.xournalpp.xournalpp.desktop;
+application/x-xopt=com.github.xournalpp.xournalpp.desktop;
+
+# Saved Meld comparisons
+application/x-meld-comparison=org.gnome.Meld.desktop;
+
+# Archives and compressed files
+application/zip=org.gnome.FileRoller.desktop;
+application/x-zip=org.gnome.FileRoller.desktop;
+application/x-zip-compressed=org.gnome.FileRoller.desktop;
+application/x-7z-compressed=org.gnome.FileRoller.desktop;
+application/vnd.rar=org.gnome.FileRoller.desktop;
+application/x-rar=org.gnome.FileRoller.desktop;
+application/x-rar-compressed=org.gnome.FileRoller.desktop;
+application/x-tar=org.gnome.FileRoller.desktop;
+application/x-gtar=org.gnome.FileRoller.desktop;
+application/gzip=org.gnome.FileRoller.desktop;
+application/x-gzip=org.gnome.FileRoller.desktop;
+application/x-compressed-tar=org.gnome.FileRoller.desktop;
+application/bzip2=org.gnome.FileRoller.desktop;
+application/x-bzip=org.gnome.FileRoller.desktop;
+application/x-bzip-compressed-tar=org.gnome.FileRoller.desktop;
+application/x-xz=org.gnome.FileRoller.desktop;
+application/x-xz-compressed-tar=org.gnome.FileRoller.desktop;
+application/zstd=org.gnome.FileRoller.desktop;
+application/x-zstd-compressed-tar=org.gnome.FileRoller.desktop;
+application/x-lz4=org.gnome.FileRoller.desktop;
+application/x-lz4-compressed-tar=org.gnome.FileRoller.desktop;
+application/x-7z-compressed-tar=org.gnome.FileRoller.desktop;
+
+# Preserve the existing Discord link handler
+x-scheme-handler/discord=vesktop.desktop;
+
+[Added Associations]
+application/pdf=org.gnome.Papers.desktop;com.github.jeromerobert.pdfarranger.desktop;com.github.xournalpp.xournalpp.desktop;firefox.desktop;
+image/png=imv.desktop;gimp.desktop;
+
+[Removed Associations]
+# Keep Minecraft imports out of the generic ZIP handlers.
+application/zip=org.prismlauncher.PrismLauncher.desktop;
