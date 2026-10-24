@@ -1,0 +1,41 @@
+/* Generated from theme/palette.toml. Shared by GTK 3 and GTK 4. */
+{% set gtk_colors = {
+    'accent_bg_color': colors.accent.primary,
+    'accent_fg_color': colors.text.on_accent,
+    'accent_color': colors.accent.primary,
+    'window_bg_color': colors.surface.base,
+    'window_fg_color': colors.text.primary,
+    'view_bg_color': colors.surface.base,
+    'view_fg_color': colors.text.primary,
+    'headerbar_bg_color': colors.surface.raised,
+    'headerbar_fg_color': colors.text.primary,
+    'headerbar_border_color': colors.border.subtle,
+    'headerbar_backdrop_color': colors.surface.base,
+    'sidebar_bg_color': colors.surface.raised,
+    'sidebar_fg_color': colors.text.primary,
+    'sidebar_backdrop_color': colors.surface.base,
+    'sidebar_border_color': colors.border.subtle,
+    'card_bg_color': colors.surface.overlay,
+    'card_fg_color': colors.text.primary,
+    'dialog_bg_color': colors.surface.raised,
+    'dialog_fg_color': colors.text.primary,
+    'popover_bg_color': colors.surface.popup,
+    'popover_fg_color': colors.text.primary,
+    'thumbnail_bg_color': colors.surface.overlay,
+    'thumbnail_fg_color': colors.text.primary,
+    'destructive_bg_color': colors.status.critical,
+    'destructive_fg_color': colors.text.on_accent,
+    'destructive_color': colors.status.critical,
+    'success_bg_color': colors.status.success,
+    'success_fg_color': colors.text.on_accent,
+    'success_color': colors.status.success,
+    'warning_bg_color': colors.status.warning,
+    'warning_fg_color': colors.text.on_accent,
+    'warning_color': colors.status.warning,
+    'error_bg_color': colors.status.critical,
+    'error_fg_color': colors.text.on_accent,
+    'error_color': colors.status.critical
+} %}
+{% for name, value in gtk_colors.items() %}
+@define-color {{ name }} {{ value }};
+{% endfor %}

@@ -1,0 +1,77 @@
+{% include 'theme/gtk-colors.css.j2' %}
+
+@define-color borders {{ colors.border.subtle }};
+@define-color unfocused_borders {{ colors.border.subtle }};
+@define-color insensitive_fg_color {{ colors.text.disabled }};
+@define-color theme_unfocused_fg_color {{ colors.text.secondary }};
+
+/* Moderate density; keep file rows and drag targets comfortable. */
+headerbar {
+    min-height: 32px;
+    padding: 4px 6px;
+}
+
+button {
+    min-height: 24px;
+    min-width: 16px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+entry {
+    min-height: 28px;
+    border-radius: 6px;
+}
+
+toolbar {
+    padding: 3px;
+    background-color: @headerbar_bg_color;
+}
+
+toolbar button {
+    padding: 3px 5px;
+}
+
+notebook > header {
+    background-color: @headerbar_bg_color;
+}
+
+notebook > header tabs tab {
+    min-height: 26px;
+    padding: 3px 10px;
+}
+
+menu, .menu {
+    padding: 4px;
+    border: 1px solid @borders;
+    border-radius: 6px;
+}
+
+menuitem {
+    min-height: 22px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+tooltip {
+    color: @window_fg_color;
+    background-color: @popover_bg_color;
+    border: 1px solid @borders;
+    border-radius: 6px;
+}
+
+/* Scoped to Thunar: avoid changing spacing in editors and spreadsheets. */
+.thunar .sidebar {
+    background-color: @sidebar_bg_color;
+    color: @sidebar_fg_color;
+}
+
+.thunar .sidebar .view {
+    background-color: @sidebar_bg_color;
+}
+
+.thunar .standard-view .view:selected,
+.thunar .sidebar .view:selected {
+    background-color: {{ colors.selection.background }};
+    color: {{ colors.selection.foreground }};
+}

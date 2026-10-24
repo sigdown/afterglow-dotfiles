@@ -1,0 +1,32 @@
+{# qt6ct stores colors in QPalette::ColorRole order, including NoRole.
+   Qt's Accent role follows PlaceholderText (Qt 6.6+). #}
+{% set roles = [
+    ('WindowText', colors.text.primary),
+    ('Button', colors.surface.raised),
+    ('Light', colors.border.strong),
+    ('Midlight', colors.surface.hover),
+    ('Dark', colors.surface.base),
+    ('Mid', colors.border.subtle),
+    ('Text', colors.text.primary),
+    ('BrightText', colors.text.primary),
+    ('ButtonText', colors.text.primary),
+    ('Base', colors.surface.base),
+    ('Window', colors.surface.base),
+    ('Shadow', colors.surface.base),
+    ('Highlight', colors.accent.primary),
+    ('HighlightedText', colors.text.on_accent),
+    ('Link', colors.accent.sky),
+    ('LinkVisited', colors.syntax.number),
+    ('AlternateBase', colors.surface.raised),
+    ('NoRole', colors.text.primary),
+    ('ToolTipBase', colors.surface.popup),
+    ('ToolTipText', colors.text.primary),
+    ('PlaceholderText', colors.text.muted),
+    ('Accent', colors.accent.primary)
+] %}
+{% set disabled_roles = ['WindowText', 'Text', 'BrightText', 'ButtonText', 'HighlightedText', 'Link', 'LinkVisited', 'ToolTipText', 'PlaceholderText'] %}
+[ColorScheme]
+{% for group in ['active', 'disabled', 'inactive'] %}
+{{ group }}_colors={% for role, color in roles %}{% if group == 'disabled' and role in disabled_roles %}{{ colors.text.disabled }}{% elif group == 'disabled' and role in ['Highlight', 'Accent'] %}{{ colors.surface.hover }}{% else %}{{ color }}{% endif %}{{ ', ' if not loop.last else '' }}{% endfor %}
+
+{% endfor %}

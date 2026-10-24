@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+import os
 import shutil
 import tomllib
 
@@ -72,6 +73,7 @@ def main() -> None:
     BUILD_DIR.mkdir()
 
     context = load_palette()
+    context["config_home"] = str(Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config").expanduser())
     env = create_environment()
 
     for package in SRC_DIR.iterdir():
