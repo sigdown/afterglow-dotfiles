@@ -3,10 +3,10 @@
 ------------------
 
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
-    position = "auto",
-    scale    = 1.5,
+	output = "",
+	mode = "preferred",
+	position = "auto",
+	scale = 1.5,
 })
 
 -------------------
@@ -14,11 +14,11 @@ hl.monitor({
 -------------------
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("mako")
-    hl.exec_cmd("hypridle")
-    hl.exec_cmd("udiskie --smart-tray")
+	hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("waybar")
+	hl.exec_cmd("mako")
+	hl.exec_cmd("hypridle")
+	hl.exec_cmd("udiskie --smart-tray")
 end)
 
 -------------------------------
@@ -29,30 +29,14 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
------------------------
------ PERMISSIONS -----
------------------------
-
--- Permission changes require a Hyprland restart and are not applied on-the-fly.
---
--- hl.config({
---     ecosystem = {
---         enforce_permissions = true,
---     },
--- })
---
--- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
--- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
--- hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
-
 --------------
 ---- MISC ----
 --------------
 
 hl.config({
-    misc = {
-        force_default_wallpaper = -1,
-        disable_hyprland_logo   = true,
-	disable_splash_rendering = true,
-    },
+	misc = {
+		force_default_wallpaper = -1,
+		disable_hyprland_logo = true,
+		disable_splash_rendering = true,
+	},
 })

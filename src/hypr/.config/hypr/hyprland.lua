@@ -1,5 +1,6 @@
 require("config.startup")
 require("config.appearance")
+require("config.animations")
 require("config.input")
 require("config.binds")
 require("config.rules")

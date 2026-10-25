@@ -5,7 +5,6 @@
 hl.window_rule({
 	name = "suppress-maximize-events",
 	match = { class = ".*" },
-
 	suppress_event = "maximize",
 })
 
@@ -21,16 +20,6 @@ hl.window_rule({
 	},
 
 	no_focus = true,
-})
-
-hl.layer_rule({
-	match = { namespace = "fuzzel" },
-	ignore_alpha = 0.0,
-})
-
-hl.layer_rule({
-	match = { namespace = "mako" },
-	ignore_alpha = 0.0,
 })
 
 hl.window_rule({
