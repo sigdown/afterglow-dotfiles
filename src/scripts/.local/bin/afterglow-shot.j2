@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+geometry="$(slurp -d \
+    -b "{{ colors.surface.base }}88" \
+    -c "{{ colors.border.focus }}" \
+    -F "JetBrainsMono Nerd Font")" || exit 0
+[[ -n "$geometry" ]] || exit 0
+
+grim -g "$geometry" - | wl-copy --type image/png

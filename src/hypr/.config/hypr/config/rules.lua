@@ -28,3 +28,9 @@ hl.window_rule({
 	float = true,
 	center = true,
 })
+
+-- Screenshot selection must disappear before grim captures the frame.
+hl.layer_rule({
+	match = { namespace = "^selection$" },
+	no_anim = true,
+})
