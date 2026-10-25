@@ -2,10 +2,10 @@
 
 import json
 import os
-import shutil
 import subprocess
 import sys
-import time
+
+from _control_menu import menu as pick, notify, require_commands, submenu
 
 
 def pactl(*args):
@@ -32,48 +32,6 @@ def devices(kind):
 def default_device(kind):
     name = pactl(f"get-default-{kind}")
     return next((item for item in devices(kind) if item["name"] == name), None)
-
-
-def label(text):
-    return " ".join(str(text).split())
-
-
-def pick(prompt, entries):
-    args = [
-        "fuzzel", "--dmenu", "--index", "--only-match", "--no-sort",
-        "--log-level=error", "--prompt", f"{prompt} › ",
-        "--lines", str(min(len(entries), 10)),
-        "--placeholder", "Select…",
-    ]
-    content = "\n".join(label(entry) for entry in entries) + "\n"
-    deadline = time.monotonic() + 2
-    while True:
-        result = subprocess.run(args, input=content, capture_output=True, text=True, encoding="utf-8")
-        if not result.returncode or "failed to acquire lock" not in result.stderr:
-            break
-        if time.monotonic() >= deadline:
-            raise RuntimeError("Fuzzel is busy. Close the other menu and try again.")
-        time.sleep(0.05)
-    if result.returncode in (1, 2) and not result.stderr.strip():
-        raise SystemExit(0)
-    if result.returncode:
-        raise RuntimeError(result.stderr.strip() or "Failed to open Fuzzel")
-    try:
-        index = int(result.stdout.strip())
-    except ValueError:
-        raise SystemExit(0)
-    if not 0 <= index < len(entries):
-        raise SystemExit(0)
-    return index
-
-
-def submenu(prompt, entries):
-    index = pick(prompt, ["× Close", "← Back", *entries])
-    if index == 0:
-        raise SystemExit(0)
-    if index == 1:
-        return None
-    return index - 2
 
 
 def volume(device):
@@ -142,9 +100,7 @@ def choose_volume(kind):
 
 
 def main():
-    for command in ("pactl", "fuzzel"):
-        if shutil.which(command) is None:
-            raise RuntimeError(f"Command not found: {command}")
+    require_commands("pactl", "fuzzel")
     while True:
         sink = default_device("sink")
         source = default_device("source")
@@ -182,6 +138,5 @@ if __name__ == "__main__":
     except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
         message = str(error)
         print(f"control-audio: {message}", file=sys.stderr)
-        if shutil.which("notify-send"):
-            subprocess.run(["notify-send", "--app-name=control-audio", "--", "Audio", message])
+        notify("control-audio", "Audio", message)
         sys.exit(1)

@@ -1,22 +1,10 @@
 #!/usr/bin/env python3
 
-import fcntl
 import os
-import shutil
 import subprocess
 import sys
-import time
 
-
-def instance_lock():
-    runtime = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
-    lock = open(os.path.join(runtime, "control-network.lock"), "a")
-    try:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-        lock.close()
-        raise SystemExit(0)
-    return lock
+from _control_menu import instance_lock, label, menu as fuzzel, notify as menu_notify, require_commands, submenu
 
 
 def nmcli(*args, password=None, wait=30):
@@ -64,55 +52,8 @@ def rows(fields, *args):
     return [split_fields(line) for line in output.splitlines() if line]
 
 
-def label(text):
-    return " ".join(str(text).split())
-
-
-def fuzzel(prompt, entries=None):
-    args = ["fuzzel", "--dmenu", "--log-level=error", "--prompt", f"{label(prompt)} › "]
-    if entries is None:
-        args.extend(["--password", "--lines", "0", "--placeholder", "Password…"])
-        content = ""
-    else:
-        args.extend(["--index", "--only-match", "--no-sort", "--lines", str(min(len(entries), 10)),
-                     "--placeholder", "Select…"])
-        content = "\n".join(label(entry) for entry in entries) + "\n"
-    deadline = time.monotonic() + 2
-    while True:
-        result = subprocess.run(args, input=content, capture_output=True, text=True, encoding="utf-8")
-        if not result.returncode or "failed to acquire lock" not in result.stderr:
-            break
-        if time.monotonic() >= deadline:
-            raise RuntimeError("Fuzzel is busy. Close the other menu and try again.")
-        time.sleep(0.05)
-    if result.returncode in (1, 2) and not result.stderr.strip():
-        raise SystemExit(0)
-    if result.returncode:
-        raise RuntimeError(result.stderr.strip() or "Failed to open Fuzzel")
-    if entries is None:
-        password = result.stdout.removesuffix("\n")
-        if not password:
-            raise SystemExit(0)
-        return password
-    try:
-        index = int(result.stdout.strip())
-    except ValueError:
-        raise SystemExit(0)
-    if not 0 <= index < len(entries):
-        raise SystemExit(0)
-    return index
-
-
-def submenu(prompt, entries, actions=()):
-    index = fuzzel(prompt, ["× Close", "← Back", *actions, *entries])
-    if index == 0:
-        raise SystemExit(0)
-    return None if index == 1 else index - 2
-
-
 def notify(message):
-    if shutil.which("notify-send"):
-        subprocess.run(["notify-send", "--app-name=control-network", "--", "Network", message])
+    menu_notify("control-network", "Network", message)
 
 
 def devices():
@@ -227,9 +168,7 @@ def disconnect_menu():
 
 
 def main():
-    for command in ("nmcli", "fuzzel"):
-        if shutil.which(command) is None:
-            raise RuntimeError(f"Command not found: {command}")
+    require_commands("nmcli", "fuzzel")
     scan_requested = False
     while True:
         enabled = nmcli("radio", "wifi") == "enabled"
@@ -271,7 +210,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        with instance_lock():
+        with instance_lock("control-network"):
             main()
     except KeyboardInterrupt:
         sys.exit(0)
