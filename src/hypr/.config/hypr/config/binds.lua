@@ -9,8 +9,7 @@ local mainMod     = "SUPER"
 
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 
-local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
--- closeWindowBind:set_enabled(false)
+hl.bind(mainMod .. " + C", hl.dsp.window.close())
 
 hl.bind(
     mainMod .. " + M",
@@ -20,10 +19,30 @@ hl.bind(
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("$HOME/.local/bin/control-audio"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("$HOME/.local/bin/control-network"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("$HOME/.local/bin/control-bluetooth"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + G", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 
--- Move focus with mainMod + arrow keys.
+-- H/J/K/L: focus, Shift: move the window, Ctrl: resize it.
+local directions = {
+    { key = "H", direction = "left",  x = -32, y = 0 },
+    { key = "J", direction = "down",  x = 0,   y = 32 },
+    { key = "K", direction = "up",    x = 0,   y = -32 },
+    { key = "L", direction = "right", x = 32,  y = 0 },
+}
+
+for _, item in ipairs(directions) do
+    hl.bind(mainMod .. " + " .. item.key, hl.dsp.focus({ direction = item.direction }))
+    hl.bind(mainMod .. " + SHIFT + " .. item.key, hl.dsp.window.move({ direction = item.direction }))
+    hl.bind(mainMod .. " + CTRL + " .. item.key,
+        hl.dsp.window.resize({ x = item.x, y = item.y, relative = true }),
+        { repeating = true })
+end
+
+-- Arrow keys remain available for focus.
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
@@ -35,7 +54,7 @@ hl.bind(
 )
 
 hl.bind(
-    mainMod .. " + L",
+    mainMod .. " + ALT + L",
     hl.dsp.exec_cmd("pidof hyprlock >/dev/null || hyprlock")
 )
 
@@ -67,6 +86,9 @@ hl.bind(
 )
 
 -- Scroll through existing workspaces.
+hl.bind(mainMod .. " + ALT + J", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + ALT + K", hl.dsp.focus({ workspace = "e-1" }))
+
 hl.bind(
     mainMod .. " + mouse_down",
     hl.dsp.focus({ workspace = "e+1" })
