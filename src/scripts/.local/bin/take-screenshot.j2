@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+exec 9>"${XDG_RUNTIME_DIR}/take-screenshot.lock"
+flock -n 9 || exit 0
+
 geometry="$(slurp -d \
     -b "{{ colors.surface.base }}88" \
     -c "{{ colors.border.focus }}" \

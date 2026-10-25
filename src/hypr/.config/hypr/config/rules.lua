@@ -31,10 +31,8 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	match = { class = "org.telegram.desktop", title = "Media viewer" },
-	no_anim = true,
+	match = { class = "^(org.telegram.desktop|TelegramDesktop|telegramdesktop)$", title = "^Media viewer$" },
 	float = true,
-	center = true,
 })
 
 -- Screenshot selection must disappear before grim captures the frame.
