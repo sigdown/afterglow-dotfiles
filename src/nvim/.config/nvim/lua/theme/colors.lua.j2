@@ -33,7 +33,7 @@ return function(c)
   c.red1 = "{{ colors.syntax.keyword }}"
   c.yellow = "{{ colors.status.warning }}"
 
-  -- Terminal colors inside Neovim.
+  -- Tokyonight also uses this shade outside its terminal palette.
   c.terminal_black = "{{ colors.text.disabled }}"
 
   c.git = {
@@ -72,28 +72,11 @@ return function(c)
   c.border_highlight = "{{ colors.border.focus }}"
 
   c.terminal = {
-    black = "{{ colors.surface.base }}",
-    black_bright = "{{ colors.text.disabled }}",
-
-    red = "{{ colors.status.critical }}",
-    red_bright = "{{ colors.syntax.keyword }}",
-
-    green = "{{ colors.status.success }}",
-    green_bright = "{{ colors.syntax.type }}",
-
-    yellow = "{{ colors.status.warning }}",
-    yellow_bright = "{{ colors.syntax.function }}",
-
-    blue = "{{ colors.accent.sky_soft }}",
-    blue_bright = "{{ colors.accent.sky_bright }}",
-
-    magenta = "{{ colors.syntax.number }}",
-    magenta_bright = "{{ colors.syntax.constant }}",
-
-    cyan = "{{ colors.accent.secondary }}",
-    cyan_bright = "{{ colors.syntax.type }}",
-
-    white = "{{ colors.text.secondary }}",
-    white_bright = "{{ colors.text.primary }}",
+{% for name, value in colors.terminal.normal.items() %}
+    {{ name }} = "{{ value }}",
+{% endfor %}
+{% for name, value in colors.terminal.bright.items() %}
+    {{ name }}_bright = "{{ value }}",
+{% endfor %}
   }
 end
