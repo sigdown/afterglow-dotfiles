@@ -18,6 +18,7 @@ hl.bind(
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("$HOME/.local/bin/afterglow-clipboard"))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("$HOME/.local/bin/control-audio"))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("$HOME/.local/bin/control-network"))

@@ -22,6 +22,20 @@ hl.window_rule({
 	no_focus = true,
 })
 
+-- Keep short-lived dialogs above their parent window.
+hl.window_rule({
+	match = { modal = true },
+	float = true,
+	center = true,
+})
+
+-- Opening media for a quick look should not rearrange the workspace.
+hl.window_rule({
+	match = { class = "^(imv|mpv)$" },
+	float = true,
+	center = true,
+})
+
 hl.window_rule({
 	match = { class = "org.telegram.desktop", title = "Media viewer" },
 	no_anim = true,
