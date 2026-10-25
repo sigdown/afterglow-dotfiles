@@ -1,0 +1,56 @@
+{
+  "icon_names": {
+    "media": [
+      "/usr/share/icons/Papirus-Dark/16x16/devices/drive-removable-media-usb.svg",
+      "drive-removable-media-usb"
+    ],
+    "browse": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/document-open.svg",
+      "document-open"
+    ],
+    "mount": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-mount.svg",
+      "udiskie-mount"
+    ],
+    "unmount": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-unmount.svg",
+      "udiskie-unmount"
+    ],
+    "unlock": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-unlock.svg",
+      "udiskie-unlock"
+    ],
+    "lock": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-lock.svg",
+      "udiskie-lock"
+    ],
+    "eject": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-eject.svg",
+      "udiskie-eject"
+    ],
+    "detach": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-detach.svg",
+      "udiskie-detach"
+    ],
+    "delete": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-eject.svg",
+      "udiskie-eject"
+    ],
+    "losetup": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/udiskie-mount.svg",
+      "udiskie-mount"
+    ],
+    "forget_password": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/edit-delete.svg",
+      "edit-delete"
+    ],
+    "clear_passwords": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/edit-delete.svg",
+      "edit-delete"
+    ],
+    "quit": [
+      "/usr/share/icons/Papirus-Dark/24x24/actions/application-exit.svg",
+      "application-exit"
+    ]
+  }
+}
