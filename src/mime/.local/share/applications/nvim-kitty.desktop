@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Neovim (Kitty)
+Comment=Edit text and source files in Neovim
+TryExec=nvim
+Exec=kitty -e nvim -- %F
+Terminal=false
+Icon=nvim
+Categories=Utility;TextEditor;
+StartupNotify=false
+MimeType=text/plain;text/markdown;text/x-python;text/x-shellscript;application/x-shellscript;text/x-c;text/x-chdr;text/x-csrc;text/x-c++;text/x-c++hdr;text/x-c++src;text/x-java;text/x-rust;text/x-go;text/x-lua;text/x-makefile;text/x-tex;text/css;text/javascript;application/javascript;application/json;application/toml;application/yaml;application/x-yaml;text/yaml;application/xml;text/xml;

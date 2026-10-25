@@ -112,6 +112,7 @@ ZSH_HIGHLIGHT_STYLES[cursor]='fg={{ colors.cursor.cursor }},bg={{ colors.cursor.
 export EDITOR='nvim'
 export VISUAL='nvim'
 export LESS='-R'
+export ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
 
 # ─────────────────────────────────────────────
 # Aliases
@@ -137,7 +138,15 @@ fi
 # PATH
 # ─────────────────────────────────────────────
 
-export PATH="$HOME/.local/bin:$PATH"
+typeset -U path PATH
+path=(
+  "$HOME/.local/bin"
+  "$ANDROID_HOME/cmdline-tools/latest/bin"
+  "$ANDROID_HOME/platform-tools"
+  "$ANDROID_HOME/emulator"
+  "${path[@]}"
+)
+export PATH
 
 # ─────────────────────────────────────────────
 # Starship
@@ -146,6 +155,3 @@ export PATH="$HOME/.local/bin:$PATH"
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
-
-echo 'export ANDROID_HOME="$HOME/Android/Sdk"' >> ~/.zshrc
-echo 'export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"' >> ~/.zshrc
