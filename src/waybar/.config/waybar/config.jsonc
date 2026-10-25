@@ -10,7 +10,7 @@
     "reload_style_on_change": true,
 
     "modules-left": [
-        "hyprland/workspaces"
+        "ext/workspaces"
     ],
 
     "modules-center": [
@@ -28,11 +28,10 @@
         "tray"
     ],
 
-    "hyprland/workspaces": {
+    "ext/workspaces": {
         "format": "{name}",
-        "sort-by": "number",
-        "enable-bar-scroll": false,
-        "disable-click": false,
+        "sort-by-id": true,
+        "on-click": "activate",
         "tooltip": false
     },
 
@@ -166,7 +165,8 @@
 
     "tray": {
         "icon-size": 16,
-        "spacing": 6
+        "spacing": 6,
+        "cursor": true
     },
 
     "battery": {

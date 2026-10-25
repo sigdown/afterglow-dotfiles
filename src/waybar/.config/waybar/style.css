@@ -287,3 +287,14 @@ window.popup decoration {
 #privacy-item.screenshare {
     color: @status-critical;
 }
+
+#privacy:hover,
+#language:hover,
+#backlight:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#battery:hover {
+    color: @text-primary;
+    background: @surface-hover;
+}
