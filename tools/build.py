@@ -30,6 +30,7 @@ def create_environment() -> Environment:
     )
     env.filters["hex_alpha"] = hex_alpha
     env.filters["hypr_rgba"] = hypr_rgba
+    env.filters["hex_rgb"] = hex_rgb
     return env
 
 
@@ -39,6 +40,10 @@ def hex_alpha(value: str, alpha: str = "FF") -> str:
 
 def hypr_rgba(value: str) -> str:
     return f"rgba({hex_alpha(value)})"
+
+
+def hex_rgb(value: str, separator: str = ", ") -> str:
+    return separator.join(str(int(value[i : i + 2], 16)) for i in (1, 3, 5))
 
 
 def render_template(env: Environment, context: dict, source: Path, target: Path) -> None:

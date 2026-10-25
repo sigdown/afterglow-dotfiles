@@ -1,0 +1,174 @@
+return function(hl)
+  local function set(groups, attributes)
+    for _, group in ipairs(groups) do
+      hl[group] = vim.deepcopy(attributes)
+    end
+  end
+
+  -- Editor, popups, completion, search, and LSP UI
+  set({ "Normal", "NormalNC" }, { bg = "NONE", fg = "{{ colors.text.primary }}" })
+  set({ "NormalFloat", "StatusLine" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.text.primary }}" })
+  set({ "FloatBorder" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.border.subtle }}" })
+  set({ "FloatTitle" }, { bg = "{{ colors.surface.raised }}", bold = true, fg = "{{ colors.text.primary }}" })
+  set({
+    "CursorLine", "CursorColumn", "LspReferenceText", "LspReferenceRead", "LspReferenceWrite",
+  }, { bg = "{{ colors.surface.hover }}" })
+  set({
+    "LineNr", "LineNrAbove", "LineNrBelow", "Whitespace", "SpecialKey", "LspCodeLens", "Conceal",
+  }, { fg = "{{ colors.text.muted }}" })
+  set({ "CursorLineNr", "Title", "MatchParen" }, { bold = true, fg = "{{ colors.accent.primary }}" })
+  set({ "EndOfBuffer" }, { fg = "{{ colors.surface.base }}" })
+  set({ "NonText" }, { fg = "{{ colors.text.disabled }}" })
+  set({ "SignColumn", "FoldColumn" }, { bg = "NONE", fg = "{{ colors.text.muted }}" })
+  set({ "SignColumnSB" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.text.muted }}" })
+  set({ "VertSplit" }, { fg = "{{ colors.border.subtle }}" })
+  set({ "WinSeparator" }, { bold = false, fg = "{{ colors.border.subtle }}" })
+  set({ "StatusLineNC", "TabLine" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.text.muted }}" })
+  set({ "TabLineFill" }, { bg = "NONE" })
+  set({ "TabLineSel" }, { bg = "{{ colors.accent.primary }}", bold = true, fg = "{{ colors.text.on_accent }}" })
+  set({ "Question", "MoreMsg", "Directory", "qfFileName" }, { fg = "{{ colors.accent.sky }}" })
+  set({ "ModeMsg" }, { bold = true, fg = "{{ colors.text.secondary }}" })
+  set({ "MsgArea" }, { fg = "{{ colors.text.secondary }}" })
+  set({ "WildMenu" }, { bg = "{{ colors.selection.background }}", fg = "{{ colors.text.primary }}" })
+  set({ "Visual", "VisualNOS" }, { bg = "{{ colors.selection.background }}", fg = "{{ colors.selection.foreground }}" })
+  set({ "Search" }, { bg = "{{ colors.surface.hover }}", bold = true, fg = "{{ colors.accent.primary }}" })
+  set({ "IncSearch" }, { bg = "{{ colors.accent.primary }}", fg = "{{ colors.text.on_accent }}" })
+  set({ "CurSearch" }, "IncSearch")
+  set({ "Cursor" }, { bg = "{{ colors.cursor.cursor }}", fg = "{{ colors.text.on_accent }}" })
+  set({ "lCursor", "CursorIM" }, "Cursor")
+  set({ "Pmenu" }, { bg = "{{ colors.surface.popup }}", fg = "{{ colors.text.primary }}" })
+  set({ "PmenuSel" }, { bg = "{{ colors.surface.hover }}", fg = "{{ colors.text.primary }}" })
+  set({ "PmenuMatch" }, { bg = "{{ colors.surface.popup }}", bold = true, fg = "{{ colors.accent.sky }}" })
+  set({ "PmenuMatchSel" }, { bg = "{{ colors.surface.hover }}", bold = true, fg = "{{ colors.accent.sky_bright }}" })
+  set({ "PmenuSbar" }, { bg = "{{ colors.surface.overlay }}" })
+  set({ "PmenuThumb" }, { bg = "{{ colors.text.muted }}" })
+  set({ "QuickFixLine", "LspSignatureActiveParameter" }, { bg = "{{ colors.selection.background }}", bold = true })
+  set({ "LspInlayHint" }, { bg = "{{ colors.surface.overlay }}", fg = "{{ colors.text.muted }}" })
+  set({ "LspInfoBorder" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.border.focus }}" })
+  set({ "Folded" }, { bg = "{{ colors.surface.overlay }}", fg = "{{ colors.accent.sky_soft }}" })
+  set({ "helpCommand" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.accent.sky }}" })
+
+  -- Syntax, Tree-sitter, Markdown, and LSP semantic tokens
+  set({ "Comment", "@comment", "@lsp.type.comment" }, { fg = "{{ colors.syntax.comment }}", italic = true })
+  set({
+    "Constant", "@constant", "@lsp.type.enumMember", "@lsp.typemod.enumMember.defaultLibrary",
+    "@lsp.typemod.variable.static",
+  }, { fg = "{{ colors.syntax.constant }}" })
+  set({
+    "String", "Character", "@string", "@string.documentation", "@character", "@markup.raw", "@lsp.type.string",
+    "@lsp.typemod.string.injected",
+  }, { fg = "{{ colors.syntax.string }}" })
+  set({ "Number", "Float", "@number", "@number.float", "@lsp.type.number" }, { fg = "{{ colors.syntax.number }}" })
+  set({ "Boolean", "@constant.builtin", "@boolean", "@lsp.type.boolean" }, { fg = "{{ colors.syntax.boolean }}" })
+  set({
+    "Identifier", "@variable", "@lsp.type.generic", "@lsp.type.variable", "@lsp.typemod.variable.injected",
+  }, { fg = "{{ colors.syntax.variable }}" })
+  set({
+    "Function", "@function", "@function.call", "@function.method", "@function.method.call", "@function.builtin",
+    "@lsp.typemod.function.defaultLibrary", "@lsp.typemod.method.defaultLibrary",
+    "@lsp.typemod.variable.callable",
+  }, { fg = "{{ colors.syntax.function }}" })
+  set({
+    "Statement", "Keyword", "Conditional", "Repeat", "Exception", "StorageClass", "PreProc", "Include",
+    "Define", "@keyword", "@keyword.return", "@keyword.conditional", "@keyword.repeat", "@keyword.exception",
+    "@keyword.storage", "@keyword.import", "@keyword.coroutine", "@keyword.debug", "@keyword.directive",
+    "@keyword.directive.define", "@type.qualifier", "@lsp.type.keyword", "@lsp.type.lifetime",
+    "@lsp.typemod.keyword.async", "@lsp.typemod.keyword.injected",
+  }, { fg = "{{ colors.syntax.keyword }}" })
+  set({
+    "Type", "@type", "@type.definition", "@variable.builtin", "@module.builtin", "@namespace.builtin",
+    "@lsp.type.enum", "@lsp.type.interface", "@lsp.type.selfKeyword", "@lsp.type.selfTypeKeyword",
+    "@lsp.type.typeAlias", "@lsp.type.typeParameter", "@lsp.type.struct",
+    "@lsp.typemod.variable.defaultLibrary",
+  }, { fg = "{{ colors.syntax.type }}" })
+  set({ "Special", "SpecialChar", "@comment.todo", "@markup.link.label" }, { fg = "{{ colors.accent.sky }}" })
+  set({
+    "Operator", "@keyword.operator", "@operator", "@lsp.type.operator", "@lsp.typemod.operator.injected",
+  }, { fg = "{{ colors.syntax.operator }}" })
+  set({
+    "Delimiter", "@punctuation.bracket", "@punctuation.delimiter", "@punctuation.special", "@tag.delimiter",
+    "@lsp.type.formatSpecifier",
+  }, { fg = "{{ colors.syntax.punctuation }}" })
+  set({ "Tag", "@tag" }, { fg = "{{ colors.syntax.tag }}" })
+  set({ "Error", "@comment.error" }, { fg = "{{ colors.status.critical }}" })
+  set({ "Todo" }, { bg = "{{ colors.status.warning }}", bold = true, fg = "{{ colors.text.on_accent }}" })
+  set({
+    "Macro", "@constant.macro", "@function.macro", "@lsp.typemod.macro.defaultLibrary",
+  }, { fg = "{{ colors.syntax.macro }}" })
+  set({ "@none" }, {})
+  set({ "@comment.warning" }, { fg = "{{ colors.status.warning }}" })
+  set({ "@comment.info" }, { fg = "{{ colors.status.info }}" })
+  set({ "@comment.hint" }, { fg = "{{ colors.accent.secondary }}" })
+  set({
+    "@string.escape", "@character.special", "@lsp.type.escapeSequence",
+  }, { fg = "{{ colors.syntax.string_escape }}" })
+  set({ "@string.regexp" }, { fg = "{{ colors.syntax.regex }}" })
+  set({ "@keyword.function" }, { fg = "{{ colors.syntax.keyword_function }}" })
+  set({
+    "@type.builtin", "@lsp.type.builtinType", "@lsp.typemod.class.defaultLibrary",
+    "@lsp.typemod.enum.defaultLibrary", "@lsp.typemod.struct.defaultLibrary",
+    "@lsp.typemod.type.defaultLibrary", "@lsp.typemod.typeAlias.defaultLibrary",
+  }, { fg = "{{ colors.syntax.builtin }}" })
+  set({ "@constructor" }, { fg = "{{ colors.syntax.constructor }}" })
+  set({ "@variable.parameter", "@lsp.type.parameter" }, { fg = "{{ colors.syntax.parameter }}" })
+  set({
+    "@variable.member", "@property", "@tag.attribute", "@lsp.type.property",
+  }, { fg = "{{ colors.syntax.property }}" })
+  set({ "@attribute", "@lsp.type.decorator" }, { fg = "{{ colors.syntax.attribute }}" })
+  set({ "@module", "@lsp.type.namespace", "@lsp.type.namespace.python" }, { fg = "{{ colors.syntax.namespace }}" })
+  set({ "@markup.link" }, { fg = "{{ colors.accent.sky }}", underline = true })
+  set({ "@markup.link.url" }, { fg = "{{ colors.accent.sky_bright }}", underline = true })
+  set({ "@markup.heading", "@markup.list.markdown" }, { bold = true, fg = "{{ colors.accent.primary }}" })
+  set({ "@markup.list" }, { fg = "{{ colors.accent.sky_soft }}" })
+  set({ "@markup.raw.markdown_inline" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.syntax.string }}" })
+  set({ "@lsp.type.unresolvedReference" }, { sp = "{{ colors.status.critical }}", undercurl = true })
+
+  -- Diagnostics
+  set({ "DiagnosticError" }, { fg = "{{ colors.status.critical }}" })
+  set({ "DiagnosticWarn" }, { fg = "{{ colors.status.warning }}" })
+  set({ "DiagnosticInfo" }, { fg = "{{ colors.status.info }}" })
+  set({ "DiagnosticHint" }, { fg = "{{ colors.accent.secondary }}" })
+  set({ "DiagnosticUnnecessary" }, { fg = "{{ colors.text.disabled }}" })
+  set({ "DiagnosticVirtualTextError" }, { bg = "{{ colors.surface.alert }}", fg = "{{ colors.status.critical }}" })
+  set({ "DiagnosticVirtualTextWarn" }, { bg = "{{ colors.surface.alert }}", fg = "{{ colors.status.warning }}" })
+  set({ "DiagnosticVirtualTextInfo" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.status.info }}" })
+  set({ "DiagnosticVirtualTextHint" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.accent.secondary }}" })
+  set({ "DiagnosticUnderlineError" }, { sp = "{{ colors.status.critical }}", undercurl = true })
+  set({ "DiagnosticUnderlineWarn" }, { sp = "{{ colors.status.warning }}", undercurl = true })
+  set({ "DiagnosticUnderlineInfo" }, { sp = "{{ colors.status.info }}", undercurl = true })
+  set({ "DiagnosticUnderlineHint" }, { sp = "{{ colors.accent.secondary }}", undercurl = true })
+
+  -- Git and Neo-tree
+  set({ "GitSignsAdd", "diffAdded", "NeoTreeGitAdded", "NeoTreeGitStaged" }, { fg = "{{ colors.status.success }}" })
+  set({
+    "GitSignsChange", "diffChanged", "NeoTreeModified", "NeoTreeGitModified", "NeoTreeGitUnstaged",
+  }, { fg = "{{ colors.status.info }}" })
+  set({ "GitSignsDelete", "diffRemoved", "NeoTreeGitDeleted" }, { fg = "{{ colors.status.critical }}" })
+  set({ "NeoTreeNormal", "NeoTreeNormalNC" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.text.primary }}" })
+  set({
+    "NeoTreeSignColumn", "NeoTreeStatusLineNC", "NeoTreeTabInactive",
+  }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.text.muted }}" })
+  set({ "NeoTreeStatusLine" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.text.secondary }}" })
+  set({ "NeoTreeFileName", "NeoTreeDirectoryName" }, { fg = "{{ colors.text.primary }}" })
+  set({ "NeoTreeFileNameOpened", "NeoTreeRootName" }, { bold = true, fg = "{{ colors.text.primary }}" })
+  set({ "NeoTreeDirectoryIcon", "NeoTreeGitUntracked" }, { fg = "{{ colors.accent.secondary }}" })
+  set({ "NeoTreeFileIcon", "NeoTreeDotfile" }, { fg = "{{ colors.text.secondary }}" })
+  set({ "NeoTreeDimText", "NeoTreeFadeText1", "NeoTreeExpander" }, { fg = "{{ colors.text.muted }}" })
+  set({ "NeoTreeFadeText2", "NeoTreeIgnored", "NeoTreeGitIgnored" }, { fg = "{{ colors.text.disabled }}" })
+  set({ "NeoTreeIndentMarker", "NeoTreeVertSplit", "NeoTreeWinSeparator" }, { fg = "{{ colors.border.subtle }}" })
+  set({ "NeoTreeCursorLine" }, { bg = "{{ colors.surface.hover }}", bold = true })
+  set({ "NeoTreeSelected" }, { bg = "{{ colors.selection.background }}", fg = "{{ colors.text.primary }}" })
+  set({ "NeoTreeGitConflict" }, { bold = true, fg = "{{ colors.status.critical }}", italic = true })
+  set({ "NeoTreeGitRenamed", "NeoTreeSymbolicLinkTarget" }, { fg = "{{ colors.accent.sky }}" })
+  set({ "NeoTreeMessage" }, { fg = "{{ colors.text.muted }}", italic = true })
+  set({ "NeoTreeFloatNormal" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.text.primary }}" })
+  set({
+    "NeoTreeFloatBorder", "NeoTreeTabSeparatorActive",
+  }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.border.subtle }}" })
+  set({
+    "NeoTreeFloatTitle", "NeoTreeTabActive", "NeoTreeTitleBar",
+  }, { bg = "{{ colors.surface.raised }}", bold = true, fg = "{{ colors.text.primary }}" })
+  set({ "NeoTreeTabSeparatorInactive" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.surface.base }}" })
+  set({ "NeoTreeEndOfBuffer" }, { fg = "{{ colors.surface.base }}" })
+  set({ "NeoTreePreview" }, { bg = "{{ colors.selection.background }}" })
+end

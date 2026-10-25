@@ -7,7 +7,6 @@ command_timeout = 500
 
 format = """
 ╭─ $directory\
-${custom.toolbox}\
 $git_branch\
 $git_status\
 $cmd_duration\
@@ -20,14 +19,6 @@ style = "bold {{ colors.text.primary }}"
 truncation_length = 3
 truncation_symbol = "…/"
 format = "[$path]($style)"
-
-
-[custom.toolbox]
-when = "test -f /run/.toolboxenv"
-command = "grep -oP 'name=\"\\K[^\"]+' /run/.containerenv"
-symbol = "  "
-style = "{{ colors.accent.secondary }}"
-format = "[$symbol$output]($style)"
 
 
 [git_branch]

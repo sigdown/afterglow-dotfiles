@@ -25,8 +25,17 @@
     ('Accent', colors.accent.primary)
 ] %}
 {% set disabled_roles = ['WindowText', 'Text', 'BrightText', 'ButtonText', 'HighlightedText', 'Link', 'LinkVisited', 'ToolTipText', 'PlaceholderText'] %}
+{% macro role_color(group, role, color) -%}
+    {%- if group == 'disabled' and role in disabled_roles -%}
+        {{ colors.text.disabled }}
+    {%- elif group == 'disabled' and role in ['Highlight', 'Accent'] -%}
+        {{ colors.surface.hover }}
+    {%- else -%}
+        {{ color }}
+    {%- endif -%}
+{%- endmacro %}
 [ColorScheme]
 {% for group in ['active', 'disabled', 'inactive'] %}
-{{ group }}_colors={% for role, color in roles %}{% if group == 'disabled' and role in disabled_roles %}{{ colors.text.disabled }}{% elif group == 'disabled' and role in ['Highlight', 'Accent'] %}{{ colors.surface.hover }}{% else %}{{ color }}{% endif %}{{ ', ' if not loop.last else '' }}{% endfor %}
+{{ group }}_colors={% for role, color in roles %}{{ role_color(group, role, color) }}{{ ', ' if not loop.last else '' }}{% endfor %}
 
 {% endfor %}
