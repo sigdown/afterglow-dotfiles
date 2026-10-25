@@ -37,8 +37,8 @@ tooltip label {
 }
 
 #workspaces button {
-    min-width: 30px;
-    min-height: 32px;
+    min-width: 32px;
+    min-height: 36px;
 
     padding: 0 2px;
     margin: 0;
@@ -48,8 +48,8 @@ tooltip label {
 }
 
 #workspaces button label {
-    min-width: 26px;
-    min-height: 32px;
+    min-width: 28px;
+    min-height: 36px;
 
     padding: 0;
     margin: 0;
@@ -75,7 +75,7 @@ tooltip label {
 }
 
 #clock {
-    padding: 0 10px;
+    padding: 0 12px;
 
     color: @text-primary;
 
@@ -90,7 +90,7 @@ tooltip label {
 #tray,
 #battery {
     margin: 0;
-    padding: 0 7px;
+    padding: 0 8px;
 
     color: @text-secondary;
 }
@@ -128,9 +128,15 @@ tooltip label {
     color: @text-muted;
 }
 
-#tray {
-    padding-left: 8px;
-    padding-right: 8px;
+#custom-tray-separator {
+    min-width: 1px;
+    min-height: 14px;
+    margin: 11px 6px;
+    padding: 0;
+
+    background: @border-subtle;
+    color: transparent;
+    font-size: 1px;
 }
 
 window.popup,
@@ -246,8 +252,8 @@ window.popup decoration {
 }
 
 #battery {
-    padding-left: 8px;
-    padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 12px;
 
     color: @text-primary;
 
