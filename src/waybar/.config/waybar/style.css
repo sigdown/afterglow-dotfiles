@@ -278,8 +278,10 @@ window.popup decoration {
 }
 
 #privacy {
-    margin: 0;
-    padding: 0 5px;
+    margin: 10px 6px 10px 0;
+    padding: 0 9px 0 5px;
+
+    border-right: 1px solid @border-subtle;
 }
 
 #privacy-item {
@@ -294,7 +296,6 @@ window.popup decoration {
     color: @status-critical;
 }
 
-#privacy:hover,
 #language:hover,
 #backlight:hover,
 #pulseaudio:hover,

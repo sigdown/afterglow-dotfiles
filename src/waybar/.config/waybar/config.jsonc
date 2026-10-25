@@ -60,13 +60,11 @@
         "modules": [
             {
                 "type": "screenshare",
-                "tooltip": true,
-                "tooltip-icon-size": 24
+                "tooltip": false
             },
             {
                 "type": "audio-in",
-                "tooltip": true,
-                "tooltip-icon-size": 24
+                "tooltip": false
             }
         ]
     },
@@ -88,6 +86,7 @@
 
         "scroll-step": 5,
         "min-brightness": 5,
+        "on-click": "$HOME/.local/bin/control-brightness",
         "tooltip": false
     },
 

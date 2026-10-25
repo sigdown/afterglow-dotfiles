@@ -21,7 +21,6 @@ require("lazy").setup({
   },
   defaults = {
     lazy = false,
-    -- Exact plugin revisions are recorded in lazy-lock.json.
     version = false,
   },
   install = { colorscheme = { "tokyonight", "habamax" } },

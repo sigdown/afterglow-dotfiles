@@ -1,9 +1,5 @@
 local colors = require("theme.colors")
 
------------------------
----- LOOK AND FEEL ----
------------------------
-
 hl.config({
 	general = {
 		gaps_in = 4,

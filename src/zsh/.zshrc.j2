@@ -41,18 +41,14 @@ bindkey '^[[1~' beginning-of-line
 bindkey '^[[4~' end-of-line
 bindkey '^[[3~' delete-char
 
-# ─────────────────────────────────────────────
 # Autosuggestions
-# ─────────────────────────────────────────────
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg={{ colors.text.muted }}'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# ─────────────────────────────────────────────
 # Syntax highlighting
-# ─────────────────────────────────────────────
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -105,18 +101,14 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]='fg={{ colors.status.critical }},bold'
 # Cursor
 ZSH_HIGHLIGHT_STYLES[cursor]='fg={{ colors.cursor.cursor }},bg={{ colors.cursor.cursor }}'
 
-# ─────────────────────────────────────────────
 # Environment
-# ─────────────────────────────────────────────
 
 export EDITOR='nvim'
 export VISUAL='nvim'
 export LESS='-R'
 export ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
 
-# ─────────────────────────────────────────────
 # Aliases
-# ─────────────────────────────────────────────
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -126,17 +118,13 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-# ─────────────────────────────────────────────
 # fzf
-# ─────────────────────────────────────────────
 
 if command -v fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
 fi
 
-# ─────────────────────────────────────────────
 # PATH
-# ─────────────────────────────────────────────
 
 typeset -U path PATH
 path=(
@@ -148,9 +136,7 @@ path=(
 )
 export PATH
 
-# ─────────────────────────────────────────────
 # Starship
-# ─────────────────────────────────────────────
 
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"

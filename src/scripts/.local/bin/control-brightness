@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+
+from _control_menu import menu, notify, require_commands
+
+
+def brightnessctl(*args):
+    result = subprocess.run(
+        ["brightnessctl", *args],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        timeout=5,
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "Backlight unavailable")
+    return result.stdout.strip()
+
+
+def backlight():
+    output = brightnessctl("-c", "backlight", "-m")
+    try:
+        device, _, _, percent, _ = output.split(",", 4)
+        return device, int(percent.removesuffix("%"))
+    except ValueError as error:
+        raise RuntimeError("Could not read backlight level") from error
+
+
+def main():
+    require_commands("brightnessctl", "fuzzel")
+    presets = [10, 25, 50, 75, 100]
+    while True:
+        device, current = backlight()
+        index = menu(
+            "Brightness",
+            ["+5%", "−5%", *(f"{value}%" for value in presets)],
+            message=f"{device} · {current}%",
+        )
+        if index < 2:
+            target = min(100, max(5, current + (5 if index == 0 else -5)))
+        else:
+            target = presets[index - 2]
+        brightnessctl("-d", device, "set", f"{target}%")
+        if index >= 2:
+            return
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(0)
+    except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
+        message = str(error)
+        print(f"control-brightness: {message}", file=sys.stderr)
+        notify("control-brightness", "Brightness", message)
+        sys.exit(1)

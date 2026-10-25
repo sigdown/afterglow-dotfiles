@@ -4,7 +4,6 @@ return {
 
     opts = {
       style = "moon",
-      -- Keep the main editing windows transparent.
       transparent = true,
 
       styles = {
@@ -12,8 +11,6 @@ return {
         keywords = {},
         functions = {},
         variables = {},
-        -- Base styles for integrations; explicit panel and popup backgrounds
-        -- are defined in theme.colors and theme.highlights.
         sidebars = "transparent",
         floats = "transparent",
       },

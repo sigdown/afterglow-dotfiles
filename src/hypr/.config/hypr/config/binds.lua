@@ -1,7 +1,3 @@
----------------------
----- KEYBINDINGS ----
----------------------
-
 local terminal    = "kitty"
 local fileManager = "thunar"
 local menu        = "fuzzel"
@@ -43,7 +39,6 @@ for _, item in ipairs(directions) do
         { repeating = true })
 end
 
--- Arrow keys remain available for focus.
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
@@ -59,8 +54,6 @@ hl.bind(
     hl.dsp.exec_cmd("pidof hyprlock >/dev/null || hyprlock")
 )
 
--- Switch workspaces with mainMod + [0-9].
--- Move active window with mainMod + SHIFT + [0-9].
 for i = 1, 10 do
     local key = i % 10
 
@@ -75,7 +68,6 @@ for i = 1, 10 do
     )
 end
 
--- Special workspace / scratchpad.
 hl.bind(
     mainMod .. " + S",
     hl.dsp.workspace.toggle_special("magic")
@@ -86,7 +78,6 @@ hl.bind(
     hl.dsp.window.move({ workspace = "special:magic" })
 )
 
--- Scroll through existing workspaces.
 hl.bind(mainMod .. " + ALT + J", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + ALT + K", hl.dsp.focus({ workspace = "e-1" }))
 
@@ -100,7 +91,6 @@ hl.bind(
     hl.dsp.focus({ workspace = "e-1" })
 )
 
--- Move/resize windows with mainMod + LMB/RMB and dragging.
 hl.bind(
     mainMod .. " + mouse:272",
     hl.dsp.window.drag(),
@@ -113,7 +103,6 @@ hl.bind(
     { mouse = true }
 )
 
--- Multimedia keys.
 hl.bind(
     "XF86AudioRaiseVolume",
     hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),

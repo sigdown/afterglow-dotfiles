@@ -5,7 +5,6 @@ return function(hl)
     end
   end
 
-  -- Editor, popups, completion, search, and LSP UI
   set({ "Normal", "NormalNC" }, { bg = "NONE", fg = "{{ colors.text.primary }}" })
   set({ "NormalFloat", "StatusLine" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.text.primary }}" })
   set({ "FloatBorder" }, { bg = "{{ colors.surface.raised }}", fg = "{{ colors.border.subtle }}" })
@@ -48,7 +47,6 @@ return function(hl)
   set({ "Folded" }, { bg = "{{ colors.surface.overlay }}", fg = "{{ colors.accent.sky_soft }}" })
   set({ "helpCommand" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.accent.sky }}" })
 
-  -- Syntax, Tree-sitter, Markdown, and LSP semantic tokens
   set({ "Comment", "@comment", "@lsp.type.comment" }, { fg = "{{ colors.syntax.comment }}", italic = true })
   set({
     "Constant", "@constant", "@lsp.type.enumMember", "@lsp.typemod.enumMember.defaultLibrary",
@@ -123,7 +121,6 @@ return function(hl)
   set({ "@markup.raw.markdown_inline" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.syntax.string }}" })
   set({ "@lsp.type.unresolvedReference" }, { sp = "{{ colors.status.critical }}", undercurl = true })
 
-  -- Diagnostics
   set({ "DiagnosticError" }, { fg = "{{ colors.status.critical }}" })
   set({ "DiagnosticWarn" }, { fg = "{{ colors.status.warning }}" })
   set({ "DiagnosticInfo" }, { fg = "{{ colors.status.info }}" })
@@ -138,7 +135,6 @@ return function(hl)
   set({ "DiagnosticUnderlineInfo" }, { sp = "{{ colors.status.info }}", undercurl = true })
   set({ "DiagnosticUnderlineHint" }, { sp = "{{ colors.accent.secondary }}", undercurl = true })
 
-  -- Git and Neo-tree
   set({ "GitSignsAdd", "diffAdded", "NeoTreeGitAdded", "NeoTreeGitStaged" }, { fg = "{{ colors.status.success }}" })
   set({
     "GitSignsChange", "diffChanged", "NeoTreeModified", "NeoTreeGitModified", "NeoTreeGitUnstaged",

@@ -1,7 +1,6 @@
 {% include 'theme/gtk-colors.css.j2' %}
 {% from 'theme/gtk-colors.css.j2' import gtk_colors with context %}
 
-/* Modern libadwaita uses CSS variables instead of named colors. */
 :root {
 {% for name, value in gtk_colors.items() %}
     --{{ name | replace('_', '-') }}: {{ value }};
