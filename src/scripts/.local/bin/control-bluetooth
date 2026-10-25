@@ -126,8 +126,8 @@ class Bluetooth:
                 invocation.return_value(None)
             elif method in ("RequestConfirmation", "RequestAuthorization", "AuthorizeService"):
                 prompt = f"Confirm code {values[1]:06d}" if method == "RequestConfirmation" else "Allow pairing"
-                index = menu(prompt, ["× Close", "Reject", "✓ Confirm"])
-                if index != 2:
+                index = menu(prompt, ["× Reject", "✓ Confirm"])
+                if index != 1:
                     self.cancelled = True
                     invocation.return_dbus_error("org.bluez.Error.Rejected", "Pairing rejected")
                 else:
@@ -177,7 +177,7 @@ class Bluetooth:
         name = device.get("Alias") or device.get("Name") or device.get("Address", path)
         connected = device.get("Connected", False)
         paired = device.get("Paired", False) or device.get("Bonded", False)
-        action = "󰂲 Disconnect" if connected else " Connect" if paired else " Pair and connect"
+        action = "Disconnect" if connected else "Connect" if paired else "Pair and connect"
         index = submenu(name, [action])
         if index is None:
             return False
@@ -233,21 +233,18 @@ class Bluetooth:
             powered = props.get("Powered", False)
             connected = sum(bool(device.get("Connected")) for _, device in self.devices())
             index = menu("Bluetooth", [
-                "× Close",
-                f" Devices: {connected} connected",
-                "󰑐 Find devices",
-                "󰂲 Disable Bluetooth" if powered else " Enable Bluetooth",
-                f"󰒓 Adapter: {props.get('Alias') or props['Address']}",
-            ])
-            if index == 0:
-                return
-            if index in (1, 2):
-                if self.device_list(discover=index == 2):
+                " Devices ›",
+                "󰑐 Find devices ›",
+                "󰂲 Turn Bluetooth off" if powered else " Turn Bluetooth on",
+                "󰒓 Adapter ›",
+            ], message=f"{'On' if powered else 'Off'} · {connected} connected")
+            if index in (0, 1):
+                if self.device_list(discover=index == 1):
                     return
-            elif index == 3:
+            elif index == 2:
                 self.stop_scans()
                 self.set_property(self.adapter, ADAPTER, "Powered", not powered)
-            elif index == 4:
+            elif index == 3:
                 self.choose_adapter()
 
     def close(self):

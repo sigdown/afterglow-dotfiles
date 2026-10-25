@@ -181,18 +181,15 @@ def main():
                     except RuntimeError:
                         pass
             scan_requested = True
-        active = [row[3] for row in network_devices if row[1] == "wifi" and row[2] == "connected"]
-        status = ", ".join(active) if active else "not connected" if enabled else "disabled"
+        active = [row for row in network_devices if row[1] in ("wifi", "ethernet") and row[2] == "connected"]
+        wifi_connected = any(row[1] == "wifi" for row in active)
+        status = "connected" if wifi_connected else "not connected" if enabled else "off"
         index = fuzzel("Network", [
-            "× Close",
-            f"󰤨 Wi-Fi: {status}",
-            "󰓩 Saved connections",
-            "󰤭 Disconnect",
-            "󰤭 Disable Wi-Fi" if enabled else "󰤨 Enable Wi-Fi",
-        ])
-        if index == 0:
-            return
-        index -= 1
+            f"{'󰤨' if enabled else '󰤭'} Wi-Fi ›",
+            "󰓩 Saved connections ›",
+            "󰈀 Active connections ›",
+            "󰤭 Turn Wi-Fi off" if enabled else "󰤨 Turn Wi-Fi on",
+        ], message=f"Wi-Fi {status} · {len(active)} active")
         if index == 0:
             if wifi_menu():
                 return
@@ -204,8 +201,6 @@ def main():
         elif index == 3:
             nmcli("radio", "wifi", "off" if enabled else "on")
             scan_requested = False
-        else:
-            return
 
 
 if __name__ == "__main__":

@@ -9,8 +9,10 @@ def label(value):
     return " ".join(str(value).split())
 
 
-def menu(prompt, entries=None, placeholder=None):
+def menu(prompt, entries=None, placeholder=None, message=None):
     args = ["fuzzel", "--dmenu", "--log-level=error", "--prompt", f"{label(prompt)} › "]
+    if message is not None:
+        args.extend(["--mesg", label(message)])
     if entries is None:
         args.extend(["--password", "--lines", "0", "--placeholder", placeholder or "Password…"])
         content = ""
@@ -47,10 +49,10 @@ def menu(prompt, entries=None, placeholder=None):
 
 
 def submenu(prompt, entries, actions=()):
-    index = menu(prompt, ["× Close", "← Back", *actions, *entries])
+    index = menu(prompt, ["← Back", *actions, *entries])
     if index == 0:
-        raise SystemExit(0)
-    return None if index == 1 else index - 2
+        return None
+    return index - 1
 
 
 def instance_lock(name):

@@ -2,46 +2,54 @@
 
 set -euo pipefail
 
-choice="$(
-    printf '%s\n' \
-        "× Close" \
-        "Lock" \
-        "Suspend" \
-        "Logout" \
-        "Reboot" \
-        "Power off" |
-        fuzzel --dmenu --only-match --no-sort \
-            --prompt "Session › " \
-            --placeholder "Select…" \
-            --lines 6
-)" || exit 0
+confirm() {
+    local action="$1" icon="$2" choice
+    choice="$(
+        printf '%s\n' "← Back" "$icon Confirm $action" |
+            fuzzel --dmenu --index --only-match --no-sort \
+                --prompt "$action › " \
+                --mesg "Applications will close" \
+                --lines 2
+    )" || exit 0
+    [[ "$choice" == 1 ]]
+}
 
-case "$choice" in
-    "Lock")
-        pidof hyprlock >/dev/null || hyprlock
-        ;;
+while true; do
+    choice="$(
+        printf '%s\n' \
+            "󰌾 Lock" \
+            "󰤄 Suspend" \
+            "󰍃 Logout" \
+            "󰜉 Reboot" \
+            "󰐥 Power off" |
+            fuzzel --dmenu --index --only-match --no-sort \
+                --prompt "Session › " \
+                --placeholder "Select…" \
+                --lines 5
+    )" || exit 0
 
-    "Suspend")
-        systemctl suspend
-        ;;
-
-    "Logout")
-        hyprshutdown -t "Logging out..."
-        ;;
-
-    "Reboot")
-        hyprshutdown \
-            -t "Restarting..." \
-            --post-cmd "systemctl reboot"
-        ;;
-
-    "Power off")
-        hyprshutdown \
-            -t "Shutting down..." \
-            --post-cmd "systemctl poweroff"
-        ;;
-
-    "× Close")
-        exit 0
-        ;;
-esac
+    case "$choice" in
+        0)
+            pidof hyprlock >/dev/null || hyprlock
+            ;;
+        1)
+            systemctl suspend
+            ;;
+        2)
+            hyprshutdown -t "Logging out..."
+            ;;
+        3)
+            confirm "Reboot" "󰜉" || continue
+            hyprshutdown \
+                -t "Restarting..." \
+                --post-cmd "systemctl reboot"
+            ;;
+        4)
+            confirm "Power off" "󰐥" || continue
+            hyprshutdown \
+                -t "Shutting down..." \
+                --post-cmd "systemctl poweroff"
+            ;;
+    esac
+    break
+done
