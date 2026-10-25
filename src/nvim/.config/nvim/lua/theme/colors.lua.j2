@@ -1,0 +1,99 @@
+return function(c)
+  c.bg = "{{ colors.surface.base }}"
+  c.bg_dark = "{{ colors.surface.base }}"
+  c.bg_dark1 = "{{ colors.surface.base }}"
+  c.bg_highlight = "{{ colors.surface.hover }}"
+
+  c.blue = "{{ colors.accent.sky }}"
+  c.blue0 = "{{ colors.selection.background }}"
+  c.blue1 = "{{ colors.accent.sky }}"
+  c.blue2 = "{{ colors.status.info }}"
+  c.blue5 = "{{ colors.accent.sky_soft }}"
+  c.blue6 = "{{ colors.accent.sky_bright }}"
+  c.blue7 = "{{ colors.border.subtle }}"
+
+  c.comment = "{{ colors.syntax.comment }}"
+  c.dark3 = "{{ colors.text.muted }}"
+  c.dark5 = "{{ colors.text.secondary }}"
+  c.fg = "{{ colors.text.primary }}"
+  c.fg_dark = "{{ colors.text.secondary }}"
+  c.fg_gutter = "{{ colors.text.muted }}"
+
+  c.green = "{{ colors.status.success }}"
+  c.green1 = "{{ colors.accent.secondary }}"
+  c.green2 = "{{ colors.syntax.type }}"
+  c.teal = "{{ colors.accent.secondary }}"
+  c.cyan = "{{ colors.accent.sky_bright }}"
+
+  c.magenta = "{{ colors.syntax.constant }}"
+  c.magenta2 = "{{ colors.syntax.number }}"
+  c.orange = "{{ colors.accent.primary }}"
+  c.purple = "{{ colors.syntax.number }}"
+  c.red = "{{ colors.status.critical }}"
+  c.red1 = "{{ colors.syntax.keyword }}"
+  c.yellow = "{{ colors.status.warning }}"
+
+  -- Terminal colors inside Neovim.
+  c.terminal_black = "{{ colors.text.disabled }}"
+
+  c.git = {
+    add = "{{ colors.status.success }}",
+    change = "{{ colors.status.info }}",
+    delete = "{{ colors.status.critical }}",
+  }
+
+  c.bg_popup = "{{ colors.surface.popup }}"
+  c.bg_statusline = "{{ colors.surface.raised }}"
+  c.bg_sidebar = "{{ colors.surface.base }}"
+  c.bg_float = "{{ colors.surface.raised }}"
+  c.bg_visual = "{{ colors.selection.background }}"
+  c.bg_search = "{{ colors.surface.hover }}"
+  c.fg_sidebar = "{{ colors.text.secondary }}"
+  c.fg_float = "{{ colors.text.primary }}"
+
+  c.error = "{{ colors.status.critical }}"
+  c.warning = "{{ colors.status.warning }}"
+  c.info = "{{ colors.status.info }}"
+  c.hint = "{{ colors.accent.secondary }}"
+  c.todo = "{{ colors.accent.sky }}"
+
+  c.black = "{{ colors.text.on_accent }}"
+
+  c.diff = {
+    add = "{{ colors.status.success }}",
+    delete = "{{ colors.status.critical }}",
+    change = "{{ colors.status.info }}",
+    text = "{{ colors.accent.sky }}",
+  }
+
+  c.git.ignore = "{{ colors.text.disabled }}"
+
+  c.border = "{{ colors.border.subtle }}"
+  c.border_highlight = "{{ colors.border.focus }}"
+
+  c.terminal = {
+    black = "{{ colors.surface.base }}",
+    black_bright = "{{ colors.text.disabled }}",
+
+    red = "{{ colors.status.critical }}",
+    red_bright = "{{ colors.syntax.keyword }}",
+
+    green = "{{ colors.status.success }}",
+    green_bright = "{{ colors.syntax.type }}",
+
+    yellow = "{{ colors.status.warning }}",
+    yellow_bright = "{{ colors.syntax.function }}",
+
+    blue = "{{ colors.accent.sky_soft }}",
+    blue_bright = "{{ colors.accent.sky_bright }}",
+
+    magenta = "{{ colors.syntax.number }}",
+    magenta_bright = "{{ colors.syntax.constant }}",
+
+    cyan = "{{ colors.accent.secondary }}",
+    cyan_bright = "{{ colors.syntax.type }}",
+
+    white = "{{ colors.text.secondary }}",
+    white_bright = "{{ colors.text.primary }}",
+  }
+end

@@ -1,0 +1,77 @@
+-- Vim syntax, Tree-sitter captures, Markdown and LSP semantic tokens.
+-- Groups share a rule only when their palette keys and attributes match.
+return function(set)
+  set({ "Comment", "@comment", "@lsp.type.comment" }, { fg = "{{ colors.syntax.comment }}", italic = true })
+  set({
+    "Constant", "@constant", "@lsp.type.enumMember", "@lsp.typemod.enumMember.defaultLibrary",
+    "@lsp.typemod.variable.static",
+  }, { fg = "{{ colors.syntax.constant }}" })
+  set({
+    "String", "Character", "@string", "@string.documentation", "@character", "@markup.raw", "@lsp.type.string",
+    "@lsp.typemod.string.injected",
+  }, { fg = "{{ colors.syntax.string }}" })
+  set({ "Number", "Float", "@number", "@number.float", "@lsp.type.number" }, { fg = "{{ colors.syntax.number }}" })
+  set({ "Boolean", "@constant.builtin", "@boolean", "@lsp.type.boolean" }, { fg = "{{ colors.syntax.boolean }}" })
+  set({
+    "Identifier", "@variable", "@lsp.type.generic", "@lsp.type.variable", "@lsp.typemod.variable.injected",
+  }, { fg = "{{ colors.syntax.variable }}" })
+  set({
+    "Function", "@function", "@function.call", "@function.method", "@function.method.call", "@function.builtin",
+    "@lsp.typemod.function.defaultLibrary", "@lsp.typemod.method.defaultLibrary",
+    "@lsp.typemod.variable.callable",
+  }, { fg = "{{ colors.syntax.function }}" })
+  set({
+    "Statement", "Keyword", "Conditional", "Repeat", "Exception", "StorageClass", "PreProc", "Include",
+    "Define", "@keyword", "@keyword.return", "@keyword.conditional", "@keyword.repeat", "@keyword.exception",
+    "@keyword.storage", "@keyword.import", "@keyword.coroutine", "@keyword.debug", "@keyword.directive",
+    "@keyword.directive.define", "@type.qualifier", "@lsp.type.keyword", "@lsp.type.lifetime",
+    "@lsp.typemod.keyword.async", "@lsp.typemod.keyword.injected",
+  }, { fg = "{{ colors.syntax.keyword }}" })
+  set({
+    "Type", "@type", "@type.definition", "@variable.builtin", "@module.builtin", "@namespace.builtin",
+    "@lsp.type.enum", "@lsp.type.interface", "@lsp.type.selfKeyword", "@lsp.type.selfTypeKeyword",
+    "@lsp.type.typeAlias", "@lsp.type.typeParameter", "@lsp.type.struct",
+    "@lsp.typemod.variable.defaultLibrary",
+  }, { fg = "{{ colors.syntax.type }}" })
+  set({ "Special", "SpecialChar", "@comment.todo", "@markup.link.label" }, { fg = "{{ colors.accent.sky }}" })
+  set({
+    "Operator", "@keyword.operator", "@operator", "@lsp.type.operator", "@lsp.typemod.operator.injected",
+  }, { fg = "{{ colors.syntax.operator }}" })
+  set({
+    "Delimiter", "@punctuation.bracket", "@punctuation.delimiter", "@punctuation.special", "@tag.delimiter",
+    "@lsp.type.formatSpecifier",
+  }, { fg = "{{ colors.syntax.punctuation }}" })
+  set({ "Tag", "@tag" }, { fg = "{{ colors.syntax.tag }}" })
+  set({ "Error", "@comment.error" }, { fg = "{{ colors.status.critical }}" })
+  set({ "Todo" }, { bg = "{{ colors.status.warning }}", bold = true, fg = "{{ colors.text.on_accent }}" })
+  set({
+    "Macro", "@constant.macro", "@function.macro", "@lsp.typemod.macro.defaultLibrary",
+  }, { fg = "{{ colors.syntax.macro }}" })
+  set({ "@none" }, {})
+  set({ "@comment.warning" }, { fg = "{{ colors.status.warning }}" })
+  set({ "@comment.info" }, { fg = "{{ colors.status.info }}" })
+  set({ "@comment.hint" }, { fg = "{{ colors.accent.secondary }}" })
+  set({
+    "@string.escape", "@character.special", "@lsp.type.escapeSequence",
+  }, { fg = "{{ colors.syntax.string_escape }}" })
+  set({ "@string.regexp" }, { fg = "{{ colors.syntax.regex }}" })
+  set({ "@keyword.function" }, { fg = "{{ colors.syntax.keyword_function }}" })
+  set({
+    "@type.builtin", "@lsp.type.builtinType", "@lsp.typemod.class.defaultLibrary",
+    "@lsp.typemod.enum.defaultLibrary", "@lsp.typemod.struct.defaultLibrary",
+    "@lsp.typemod.type.defaultLibrary", "@lsp.typemod.typeAlias.defaultLibrary",
+  }, { fg = "{{ colors.syntax.builtin }}" })
+  set({ "@constructor" }, { fg = "{{ colors.syntax.constructor }}" })
+  set({ "@variable.parameter", "@lsp.type.parameter" }, { fg = "{{ colors.syntax.parameter }}" })
+  set({
+    "@variable.member", "@property", "@tag.attribute", "@lsp.type.property",
+  }, { fg = "{{ colors.syntax.property }}" })
+  set({ "@attribute", "@lsp.type.decorator" }, { fg = "{{ colors.syntax.attribute }}" })
+  set({ "@module", "@lsp.type.namespace", "@lsp.type.namespace.python" }, { fg = "{{ colors.syntax.namespace }}" })
+  set({ "@markup.link" }, { fg = "{{ colors.accent.sky }}", underline = true })
+  set({ "@markup.link.url" }, { fg = "{{ colors.accent.sky_bright }}", underline = true })
+  set({ "@markup.heading", "@markup.list.markdown" }, { bold = true, fg = "{{ colors.accent.primary }}" })
+  set({ "@markup.list" }, { fg = "{{ colors.accent.sky_soft }}" })
+  set({ "@markup.raw.markdown_inline" }, { bg = "{{ colors.surface.base }}", fg = "{{ colors.syntax.string }}" })
+  set({ "@lsp.type.unresolvedReference" }, { sp = "{{ colors.status.critical }}", undercurl = true })
+end
